@@ -1,0 +1,19 @@
+# Dependências
+node_modules/
+
+# Builds
+.next/
+out/
+tsconfig.tsbuildinfo
+
+# Ambiente
+.env
+.env.local
+.env*.local
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+
+# Sistema
+.DS_Store
