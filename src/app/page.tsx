@@ -16,7 +16,6 @@ export default async function HomePage() {
     <main>
       <section className="hero">
         <div className="container">
-          <span className="hero-badge">Conectado</span>
           <h1>
             Soluções em
             <br />

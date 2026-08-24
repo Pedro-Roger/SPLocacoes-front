@@ -1,0 +1,599 @@
+/* ============================================================
+   STOREFRONT — repaginação visual brutalista-editorial
+   Aplica-se somente dentro de `.storefront-page` (site público) e nos
+   dois componentes de navegação compartilhados quando marcados com
+   a mesma classe (`.header.storefront`, `.bottom-nav.storefront`).
+   Não redefine nenhuma regra de globals.css — é uma camada aditiva
+   de sobreposição por especificidade. O painel administrativo
+   (/painel, /login) nunca recebe a classe `storefront` e continua
+   usando exclusivamente as regras de globals.css.
+   ============================================================ */
+
+:root {
+  /* Paleta */
+  --sf-carbon: #000000;
+  --sf-paper: #ffffff;
+  --sf-canvas: #e5e5e5;
+  --sf-mist: #f3f3f3;
+  --sf-ash: #c6c6c6;
+  --sf-smoke: #979797;
+  --sf-slate: #444444;
+  --sf-graphite: #2f2f2f;
+  --sf-mint: #d1ffca;
+  --sf-yellow: #fff100;
+
+  /* Tipografia */
+  --sf-font-display: var(--font-sf-display), 'Arial Narrow', sans-serif;
+  --sf-font-body: var(--font-sf-body), ui-sans-serif, system-ui, sans-serif;
+  --sf-font-mono: var(--font-sf-mono), ui-monospace, monospace;
+
+  /* Raios */
+  --sf-radius-btn: 8px;
+  --sf-radius-card: 32px;
+  --sf-radius-card-lg: 64px;
+  --sf-radius-pill: 48px;
+  --sf-radius-tag: 999px;
+}
+
+/* Body só ganha o canvas quente quando a página tem conteúdo storefront —
+   página de admin/login mantém o --bg original de globals.css. */
+body:has(.storefront-page) {
+  background: var(--sf-canvas);
+}
+
+.storefront-page {
+  background: var(--sf-canvas);
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-body);
+  min-height: 100vh;
+}
+
+.storefront-page ::selection {
+  background: var(--sf-mint);
+  color: var(--sf-carbon);
+}
+
+.storefront-page .container {
+  max-width: 640px;
+}
+
+@media (min-width: 1024px) {
+  .storefront-page .container {
+    max-width: 1200px;
+  }
+}
+
+/* ---------- Header / nav pill ---------- */
+
+.header.storefront {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: 0;
+  padding: 12px 0;
+}
+
+.header.storefront .header-inner {
+  height: auto;
+  gap: 12px;
+}
+
+.header.storefront .logo-mark {
+  background: var(--sf-carbon);
+  border-radius: var(--sf-radius-btn);
+  font-family: var(--sf-font-mono);
+  font-weight: 500;
+}
+
+.header.storefront .logo:hover .logo-mark {
+  transform: none;
+}
+
+.header.storefront .logo-name {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.header.storefront .header-tabs {
+  background: var(--sf-paper);
+  border-radius: var(--sf-radius-pill);
+  padding: 6px;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.header.storefront .header-tabs a {
+  padding: 10px 18px;
+  border-radius: var(--sf-radius-pill);
+  color: var(--sf-slate);
+  font-family: var(--sf-font-body);
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.header.storefront .header-tabs a::after {
+  display: none;
+}
+
+.header.storefront .header-tabs a:hover {
+  color: var(--sf-carbon);
+  background: var(--sf-mist);
+}
+
+.header.storefront .header-tabs a.active {
+  background: var(--sf-carbon);
+  color: #fff;
+}
+
+/* ---------- Hero ---------- */
+
+.storefront-page .hero {
+  background: var(--sf-canvas);
+  color: var(--sf-carbon);
+  padding: 48px 0 40px;
+  overflow: visible;
+}
+
+.storefront-page .hero h1 {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(40px, 9vw, 80px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  max-width: 13ch;
+}
+
+.storefront-page .hero p {
+  color: var(--sf-slate);
+  font-family: var(--sf-font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 42ch;
+}
+
+.storefront-page .hero-badge {
+  background: var(--sf-mint);
+  color: var(--sf-carbon);
+  border-radius: var(--sf-radius-tag);
+  font-family: var(--sf-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.storefront-page .hero-badge::before {
+  background: var(--sf-carbon);
+}
+
+@media (min-width: 768px) {
+  .storefront-page .hero {
+    padding: 72px 0 56px;
+  }
+}
+
+/* ---------- Botões ---------- */
+
+.storefront-page .btn {
+  border-radius: var(--sf-radius-btn);
+  font-family: var(--sf-font-body);
+  font-weight: 500;
+  box-shadow: none !important;
+}
+
+.storefront-page .btn-primary {
+  background: var(--sf-carbon);
+  color: #fff;
+}
+
+.storefront-page .btn-primary:hover {
+  background: var(--sf-graphite);
+}
+
+.storefront-page .btn-outline-light {
+  border-color: var(--sf-carbon);
+  color: var(--sf-carbon);
+  background: transparent;
+}
+
+.storefront-page .btn-outline-light:hover {
+  border-color: var(--sf-carbon);
+  background: var(--sf-mist);
+}
+
+.storefront-page .btn-outline {
+  border-color: var(--sf-carbon);
+  color: var(--sf-carbon);
+  background: var(--sf-paper);
+}
+
+.storefront-page .btn-outline:hover {
+  background: var(--sf-mist);
+}
+
+.storefront-page .btn-dark {
+  background: var(--sf-carbon);
+}
+
+.storefront-page .btn-dark:hover {
+  background: var(--sf-graphite);
+}
+
+.storefront-page .btn-whatsapp {
+  border-radius: var(--sf-radius-btn);
+}
+
+/* ---------- Selos de confiança ---------- */
+
+.storefront-page .trust-row {
+  margin-top: 20px;
+  gap: 12px;
+}
+
+.storefront-page .trust-card {
+  background: var(--sf-carbon);
+  border: 0;
+  border-radius: var(--sf-radius-card);
+  box-shadow: none;
+  padding: 20px 10px;
+  transition: none;
+}
+
+.storefront-page .trust-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.storefront-page .trust-card strong {
+  color: #fff;
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.storefront-page .trust-card span {
+  color: var(--sf-ash);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Seções ---------- */
+
+.storefront-page .section-head h2 {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(24px, 4vw, 36px);
+  letter-spacing: -0.01em;
+}
+
+.storefront-page .section-head a {
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--sf-carbon);
+  background: var(--sf-mint);
+  padding: 6px 14px;
+  border-radius: var(--sf-radius-tag);
+  transition: background-color var(--dur-fast) ease;
+}
+
+.storefront-page .section-head a:hover {
+  background: var(--sf-yellow);
+  color: var(--sf-carbon);
+}
+
+/* ---------- Busca / filtros ---------- */
+
+.storefront-page .search-box {
+  background: var(--sf-paper);
+  border: 0;
+  border-radius: var(--sf-radius-pill);
+  box-shadow: none;
+  padding: 14px 18px;
+}
+
+.storefront-page .search-box:focus-within {
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--sf-carbon);
+}
+
+.storefront-page .filter-bar .input {
+  border-radius: var(--sf-radius-pill);
+  border: 1.5px solid var(--sf-ash);
+  background: var(--sf-paper);
+}
+
+.storefront-page .filter-bar .input:focus {
+  border-color: var(--sf-carbon);
+  box-shadow: 0 0 0 2px var(--sf-carbon);
+}
+
+/* ---------- Grade de cards ---------- */
+
+.storefront-page .equip-card {
+  background: var(--sf-paper);
+  border: 0;
+  border-radius: var(--sf-radius-card);
+  box-shadow: none;
+  transition: outline-color var(--dur-fast) ease;
+  outline: 1.5px solid transparent;
+  outline-offset: -1.5px;
+}
+
+.storefront-page .equip-card:hover {
+  transform: none;
+  box-shadow: none;
+  outline-color: var(--sf-carbon);
+}
+
+.storefront-page .equip-card-img-wrap {
+  background: var(--sf-mist);
+}
+
+.storefront-page .equip-card:hover .equip-card-img {
+  transform: none;
+}
+
+.storefront-page .equip-card-title {
+  font-family: var(--sf-font-body);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+
+.storefront-page .equip-card-sub,
+.storefront-page .equip-card-meta {
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.storefront-page .equip-card-price {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-mono);
+  font-weight: 500;
+}
+
+.storefront-page .availability-badge {
+  border-radius: var(--sf-radius-tag);
+  font-family: var(--sf-font-mono);
+  letter-spacing: 0.02em;
+}
+
+.storefront-page .availability-disponivel {
+  background: var(--sf-mint);
+  color: var(--sf-carbon);
+}
+
+.storefront-page .availability-locado {
+  background: var(--sf-yellow);
+  color: var(--sf-carbon);
+}
+
+.storefront-page .availability-indisponivel {
+  background: var(--sf-mist);
+  color: var(--sf-slate);
+}
+
+.storefront-page .fav-btn {
+  background: var(--sf-paper);
+}
+
+.storefront-page .fav-btn.active {
+  color: #e11d48;
+}
+
+/* ---------- Página de detalhe ---------- */
+
+.storefront-page .detail-price {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--sf-carbon);
+  font-size: clamp(28px, 5vw, 40px);
+}
+
+.storefront-page .detail-title {
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--sf-smoke);
+}
+
+.storefront-page .panel {
+  background: var(--sf-paper);
+  border: 0;
+  border-radius: var(--sf-radius-card);
+  box-shadow: none;
+}
+
+.storefront-page .panel h2 {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+
+.storefront-page .key-spec {
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}
+
+.storefront-page .key-spec strong {
+  font-family: var(--sf-font-body);
+  color: var(--sf-carbon);
+}
+
+.storefront-page .key-spec svg {
+  color: var(--sf-carbon);
+}
+
+.storefront-page .spec-list li {
+  border-bottom-color: var(--sf-ash);
+  font-family: var(--sf-font-body);
+}
+
+.storefront-page .spec-list span {
+  color: var(--sf-smoke);
+}
+
+/* ---------- Notícias / mural ---------- */
+
+.storefront-page .news-card {
+  background: var(--sf-paper);
+  border: 0;
+  border-radius: var(--sf-radius-card);
+  box-shadow: none;
+  transition: none;
+}
+
+.storefront-page .news-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.storefront-page .news-card-date {
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--sf-smoke);
+}
+
+.storefront-page .news-card-body h3 {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.storefront-page .news-card-body p {
+  color: var(--sf-slate);
+}
+
+.storefront-page .news-card-cta {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.storefront-page .article-cover {
+  border-radius: var(--sf-radius-card);
+}
+
+.storefront-page .article h1 {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(32px, 6vw, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+
+.storefront-page .article-content {
+  color: var(--sf-graphite);
+  font-family: var(--sf-font-body);
+}
+
+/* ---------- Formulários (LeadForm) ---------- */
+
+.storefront-page .input {
+  border-radius: var(--sf-radius-btn);
+  border: 1.5px solid var(--sf-ash);
+  background: var(--sf-paper);
+  font-family: var(--sf-font-body);
+}
+
+.storefront-page .input:focus {
+  border-color: var(--sf-carbon);
+  box-shadow: 0 0 0 2px var(--sf-carbon);
+}
+
+.storefront-page .field-label {
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--sf-slate);
+}
+
+.storefront-page .form-feedback.ok {
+  color: #15803d;
+}
+
+/* ---------- Página / estado vazio ---------- */
+
+.storefront-page .page-title {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(28px, 5vw, 40px);
+  letter-spacing: -0.01em;
+}
+
+.storefront-page .page-subtitle {
+  color: var(--sf-slate);
+  font-family: var(--sf-font-body);
+}
+
+.storefront-page .empty-state {
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.storefront-page .load-more .btn-outline {
+  border-radius: var(--sf-radius-pill);
+}
+
+/* ---------- Bottom nav (mobile) — pill flutuante ---------- */
+
+.bottom-nav.storefront {
+  background: var(--sf-paper);
+  border-top: 0;
+  backdrop-filter: none;
+  box-shadow: none;
+  left: 12px;
+  right: 12px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  height: 60px;
+  border-radius: var(--sf-radius-pill);
+}
+
+.bottom-nav.storefront a {
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  text-transform: uppercase;
+  font-size: 9px;
+}
+
+.bottom-nav.storefront a.active {
+  color: var(--sf-carbon);
+}
+
+/* ---------- WhatsApp flutuante ---------- */
+
+.storefront-page .whatsapp-fab {
+  box-shadow: none;
+  bottom: calc(60px + 22px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 1024px) {
+  .bottom-nav.storefront {
+    display: none;
+  }
+}

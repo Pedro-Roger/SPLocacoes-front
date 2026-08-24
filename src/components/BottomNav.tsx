@@ -14,9 +14,10 @@ const ITEMS = [
 // Barra de navegação inferior fixa (mockup): Busca / Catálogo / Favoritos / Perfil
 export default function BottomNav() {
   const pathname = usePathname();
+  const isAdmin = pathname.startsWith('/painel') || pathname.startsWith('/login');
 
   return (
-    <nav className="bottom-nav" aria-label="Navegação principal">
+    <nav className={`bottom-nav ${isAdmin ? '' : 'storefront'}`} aria-label="Navegação principal">
       {ITEMS.map(({ href, label, Icon }) => (
         <Link key={href} href={href} className={pathname.startsWith(href) ? 'active' : ''}>
           <Icon size={22} />

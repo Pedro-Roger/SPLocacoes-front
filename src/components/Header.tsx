@@ -7,9 +7,10 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
   const pathname = usePathname();
   const isLocacao = pathname === '/' || pathname.startsWith('/locacao') || pathname.startsWith('/equipamento');
+  const isAdmin = pathname.startsWith('/painel') || pathname.startsWith('/login');
 
   return (
-    <header className="header">
+    <header className={`header ${isAdmin ? '' : 'storefront'}`}>
       <div className="container header-inner">
         <Link href="/" className="logo">
           <span className="logo-mark">SP</span>
