@@ -5,6 +5,7 @@ import Trailer3D from '@/components/Trailer3D';
 import { getEquipments } from '@/lib/equipments';
 import { getNews, formatNewsDate } from '@/lib/news';
 import { ArrowRightIcon } from '@/components/Icons';
+import { MotionItem, MotionSection } from '@/components/Motion';
 
 // Início — hero institucional, selos de confiança, grade inicial do
 // catálogo e destaque de atualizações (Estágios 1 e 4)
@@ -17,7 +18,7 @@ export default async function HomePage() {
     <main>
       <section className="hero">
         <div className="container hero-container">
-          <div className="hero-content">
+          <MotionSection className="hero-content">
             <h1>
               Soluções em
               <br />
@@ -35,30 +36,36 @@ export default async function HomePage() {
               </Link>
               <WhatsAppLink />
             </div>
-          </div>
-          <div className="hero-3d-col">
+          </MotionSection>
+          <MotionSection className="hero-3d-col" delay={0.12}>
             <Trailer3D />
-          </div>
+          </MotionSection>
         </div>
       </section>
 
       <div className="container">
-        <div className="trust-row">
-          <div className="trust-card">
+        <MotionSection className="trust-row">
+          <MotionItem>
+            <div className="trust-card">
             <strong>+10 Anos</strong>
             <span>de mercado</span>
-          </div>
-          <div className="trust-card">
+            </div>
+          </MotionItem>
+          <MotionItem delay={0.05}>
+            <div className="trust-card">
             <strong>+500</strong>
             <span>clientes atendidos</span>
-          </div>
-          <div className="trust-card">
+            </div>
+          </MotionItem>
+          <MotionItem delay={0.1}>
+            <div className="trust-card">
             <strong>+100</strong>
             <span>equipamentos</span>
-          </div>
-        </div>
+            </div>
+          </MotionItem>
+        </MotionSection>
 
-        <section className="section">
+        <MotionSection className="section">
           <div className="section-head">
             <h2>Destaques do Estoque</h2>
             <Link href="/locacao">Ver todos</Link>
@@ -68,9 +75,9 @@ export default async function HomePage() {
               <EquipmentCard key={e.slug} equipment={e} />
             ))}
           </div>
-        </section>
+        </MotionSection>
 
-        <section className="section">
+        <MotionSection className="section">
           <div className="section-head">
             <h2>Atualizações</h2>
             <Link href="/atualizacoes">Ver mural</Link>
@@ -89,7 +96,7 @@ export default async function HomePage() {
               </div>
             </Link>
           ))}
-        </section>
+        </MotionSection>
       </div>
 
       <WhatsAppFab />

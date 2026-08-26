@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'motion/react';
 
 // Cabeçalho com logo e abas Locação / Seminovos (mockup)
 export default function Header() {
@@ -10,15 +11,22 @@ export default function Header() {
   const isAdmin = pathname.startsWith('/painel') || pathname.startsWith('/login');
 
   return (
-    <header className={`header ${isAdmin ? '' : 'storefront'}`}>
+    <motion.header
+      className={`header ${isAdmin ? '' : 'storefront'}`}
+      initial={isAdmin ? false : { opacity: 0, y: -12 }}
+      animate={isAdmin ? undefined : { opacity: 1, y: 0 }}
+      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="container header-inner">
-        <Link href="/" className="logo">
+        <motion.div whileHover={isAdmin ? undefined : { y: -1 }} whileTap={isAdmin ? undefined : { scale: 0.98 }}>
+          <Link href="/" className="logo">
           <img
             src="/splogo.png"
             alt="SP Locações"
             style={{ height: '56px', width: 'auto', maxHeight: '100%', objectFit: 'contain' }}
           />
-        </Link>
+          </Link>
+        </motion.div>
         <nav className="header-tabs">
           <Link href="/locacao" className={isLocacao ? 'active' : ''}>
             Locação
@@ -32,6 +40,6 @@ export default function Header() {
           </Link>
         </nav>
       </div>
-    </header>
+    </motion.header>
   );
 }

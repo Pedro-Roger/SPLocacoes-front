@@ -5,6 +5,7 @@ import type { Equipment } from '@/lib/types';
 import { getFavorites } from '@/lib/favorites';
 import { getEquipments } from '@/lib/equipments';
 import EquipmentCard from '@/components/EquipmentCard';
+import { MotionSection } from '@/components/Motion';
 
 // Favoritos — salvos no navegador, sem exigir conta (requisito do plano)
 export default function FavoritosPage() {
@@ -17,8 +18,10 @@ export default function FavoritosPage() {
 
   return (
     <main className="container">
-      <h1 className="page-title">Favoritos</h1>
-      <p className="page-subtitle">Salvos neste navegador — sem precisar de conta</p>
+      <MotionSection>
+        <h1 className="page-title">Favoritos</h1>
+        <p className="page-subtitle">Salvos neste navegador — sem precisar de conta</p>
+      </MotionSection>
       {items === null ? null : items.length === 0 ? (
         <p style={{ color: 'var(--text-muted)', padding: '24px 0' }}>
           Você ainda não favoritou nenhum equipamento. Toque no coração de um card do

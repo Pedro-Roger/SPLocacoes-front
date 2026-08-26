@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import CatalogClient from '@/components/CatalogClient';
 import WhatsAppFab from '@/components/WhatsAppFab';
+import { MotionSection } from '@/components/Motion';
 import { getEquipments } from '@/lib/equipments';
 
 export const metadata: Metadata = {
@@ -14,10 +15,12 @@ export default async function CatalogoPage() {
 
   return (
     <main className="container">
-      <h1 className="page-title">Semirreboques para sua Frota</h1>
-      <p className="page-subtitle">
-        {equipments.length} equipamentos disponíveis para locação
-      </p>
+      <MotionSection>
+        <h1 className="page-title">Semirreboques para sua Frota</h1>
+        <p className="page-subtitle">
+          {equipments.length} equipamentos disponíveis para locação
+        </p>
+      </MotionSection>
       <CatalogClient initialItems={equipments} />
       <WhatsAppFab />
     </main>

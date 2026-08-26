@@ -6,10 +6,17 @@ import * as THREE from 'three';
 export default function Trailer3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    const showFallback = () => {
+      requestAnimationFrame(() => {
+        setUseFallback(true);
+        setIsLoaded(true);
+      });
+    };
 
     // --- Scene, Camera, Renderer Setup ---
     const scene = new THREE.Scene();
@@ -17,8 +24,36 @@ export default function Trailer3D() {
     let currentWidth = container.clientWidth || 550;
     let currentHeight = container.clientHeight || 420;
 
+    const canRenderWebGL = (() => {
+      try {
+        const testCanvas = document.createElement('canvas');
+        return Boolean(
+          window.WebGLRenderingContext &&
+            (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl'))
+        );
+      } catch {
+        return false;
+      }
+    })();
+
+    if (!canRenderWebGL) {
+      showFallback();
+      return;
+    }
+
     // Antialias and alpha for seamless blend into storefront background
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+      });
+    } catch {
+      showFallback();
+      return;
+    }
+
     renderer.setPixelRatio(Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2));
     renderer.setSize(currentWidth, currentHeight);
     renderer.domElement.style.width = '100%';
@@ -26,43 +61,59 @@ export default function Trailer3D() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
+    const isMobileView = () => window.matchMedia('(max-width: 1023px)').matches;
     const camera = new THREE.PerspectiveCamera(
-      38,
+      isMobileView() ? 30 : 34,
       currentWidth / currentHeight,
       0.1,
       100
     );
-    // Camera positioned at an ideal distance to see the full semi-trailer
-    camera.position.set(0, 2.8, 10.5);
-    camera.lookAt(0, 0.4, 0);
+    const applyCameraPose = () => {
+      if (isMobileView()) {
+        camera.fov = 32;
+        camera.position.set(0.55, 2.15, 10.8);
+        camera.lookAt(0.35, 1.25, 0);
+      } else {
+        camera.fov = 34;
+        camera.position.set(-0.35, 2.25, 11.2);
+        camera.lookAt(-0.55, 1.35, 0);
+      }
+      camera.updateProjectionMatrix();
+    };
+    applyCameraPose();
 
     // --- Lighting ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.2);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.45);
     scene.add(ambientLight);
 
     const mainLight = new THREE.DirectionalLight(0xffffff, 3.0);
-    mainLight.position.set(8, 12, 10);
+    mainLight.position.set(5, 12, 9);
     mainLight.castShadow = true;
     mainLight.shadow.mapSize.width = 2048;
     mainLight.shadow.mapSize.height = 2048;
     mainLight.shadow.bias = -0.0005;
     scene.add(mainLight);
 
-    const blueRimLight = new THREE.DirectionalLight(0x12a4f9, 3.5);
-    blueRimLight.position.set(-8, 8, -8);
+    const blueRimLight = new THREE.DirectionalLight(0x12a4f9, 3.2);
+    blueRimLight.position.set(-7, 6, -6);
     scene.add(blueRimLight);
 
-    const frontFillLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    frontFillLight.position.set(0, 4, 10);
+    const frontFillLight = new THREE.DirectionalLight(0xffffff, 2.6);
+    frontFillLight.position.set(2, 5, 10);
     scene.add(frontFillLight);
+
+    const lowAccentLight = new THREE.PointLight(0x12a4f9, 1.2, 12);
+    lowAccentLight.position.set(2.2, 1.2, 3.2);
+    scene.add(lowAccentLight);
 
     // --- Master Group ---
     const rootGroup = new THREE.Group();
-    rootGroup.position.set(0, -0.4, 0);
-    rootGroup.rotation.y = Math.PI - 0.4;
+    rootGroup.position.set(0.05, -0.44, 0);
+    rootGroup.rotation.y = isMobileView() ? -Math.PI / 2 - 0.08 : Math.PI + 0.34;
+    rootGroup.scale.setScalar(isMobileView() ? 0.72 : 0.86);
     scene.add(rootGroup);
 
     // Ground Contact Shadow (Soft plane shadow)
@@ -93,20 +144,20 @@ export default function Trailer3D() {
     // --- Materials Palette ---
     const navyCabMat = new THREE.MeshStandardMaterial({
       color: 0x021b79,
-      roughness: 0.25,
-      metalness: 0.7,
+      roughness: 0.22,
+      metalness: 0.78,
     });
 
     const lightBlueMat = new THREE.MeshStandardMaterial({
       color: 0x12a4f9,
-      roughness: 0.3,
-      metalness: 0.4,
+      roughness: 0.24,
+      metalness: 0.48,
     });
 
     const trailerBodyMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      roughness: 0.35,
-      metalness: 0.1,
+      color: 0xf7fbff,
+      roughness: 0.42,
+      metalness: 0.12,
     });
 
     const darkChassisMat = new THREE.MeshStandardMaterial({
@@ -149,6 +200,15 @@ export default function Trailer3D() {
       roughness: 0.2,
     });
 
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x9bdafc, transparent: true, opacity: 0.42 });
+    const darkEdgeMat = new THREE.LineBasicMaterial({ color: 0x010d3f, transparent: true, opacity: 0.36 });
+
+    const addEdges = (mesh: THREE.Mesh, material = edgeMat) => {
+      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), material);
+      mesh.add(edges);
+      return edges;
+    };
+
     // Helper: Wheel Assembly Generator
     const createWheel = () => {
       const wheelGroup = new THREE.Group();
@@ -170,6 +230,13 @@ export default function Trailer3D() {
       const hub = new THREE.Mesh(hubGeo, lightBlueMat);
       hub.rotation.z = Math.PI / 2;
       wheelGroup.add(hub);
+
+      for (let i = 0; i < 6; i++) {
+        const spokeGeo = new THREE.BoxGeometry(0.04, 0.03, 0.26);
+        const spoke = new THREE.Mesh(spokeGeo, chromeMat);
+        spoke.rotation.x = (Math.PI / 6) * i;
+        wheelGroup.add(spoke);
+      }
 
       return wheelGroup;
     };
@@ -224,6 +291,7 @@ export default function Trailer3D() {
     cabBase.position.set(0.65, 1.6, 0);
     cabBase.castShadow = true;
     cabBase.receiveShadow = true;
+    addEdges(cabBase, darkEdgeMat);
     truckGroup.add(cabBase);
 
     // Aerodynamic Cab Roof Deflector
@@ -232,6 +300,7 @@ export default function Trailer3D() {
     roofDeflector.position.set(0.45, 2.75, 0);
     roofDeflector.rotation.z = -0.15;
     roofDeflector.castShadow = true;
+    addEdges(roofDeflector);
     truckGroup.add(roofDeflector);
 
     // Windshield (Front glass)
@@ -255,6 +324,7 @@ export default function Trailer3D() {
     const grilleGeo = new THREE.BoxGeometry(0.12, 0.85, 1.4);
     const grille = new THREE.Mesh(grilleGeo, darkChassisMat);
     grille.position.set(1.72, 1.05, 0);
+    addEdges(grille, darkEdgeMat);
     truckGroup.add(grille);
 
     // Chrome Grille Accents / Slats
@@ -270,6 +340,7 @@ export default function Trailer3D() {
     const bumper = new THREE.Mesh(bumperGeo, lightBlueMat);
     bumper.position.set(1.65, 0.55, 0);
     bumper.castShadow = true;
+    addEdges(bumper);
     truckGroup.add(bumper);
 
     const lightGeo = new THREE.BoxGeometry(0.08, 0.18, 0.35);
@@ -310,6 +381,17 @@ export default function Trailer3D() {
     const hitch = new THREE.Mesh(hitchGeo, darkChassisMat);
     hitch.position.set(-0.85, 0.74, 0);
     truckGroup.add(hitch);
+
+    const frontLogoGeo = new THREE.BoxGeometry(0.04, 0.16, 0.46);
+    const frontLogo = new THREE.Mesh(frontLogoGeo, chromeMat);
+    frontLogo.position.set(1.91, 1.22, 0);
+    truckGroup.add(frontLogo);
+
+    const visorGeo = new THREE.BoxGeometry(0.08, 0.08, 1.72);
+    const visor = new THREE.Mesh(visorGeo, lightBlueMat);
+    visor.position.set(1.82, 2.32, 0);
+    visor.rotation.z = -0.18;
+    truckGroup.add(visor);
 
     // Truck Wheels (Front Axle & 2 Rear Tandem Axles)
     // Front Axle
@@ -357,6 +439,7 @@ export default function Trailer3D() {
     trailerBox.position.set(-trailerLength / 2, 2.05, 0);
     trailerBox.castShadow = true;
     trailerBox.receiveShadow = true;
+    addEdges(trailerBox);
     trailerGroup.add(trailerBox);
 
     // Dynamic SP Brand Decal / Texture on trailer sides
@@ -368,26 +451,24 @@ export default function Trailer3D() {
       bCtx.fillStyle = '#ffffff';
       bCtx.fillRect(0, 0, 1024, 340);
 
-      // Gradient Brand Stripe
+      bCtx.fillStyle = '#d8f6ff';
+      bCtx.fillRect(0, 54, 1024, 16);
+      bCtx.fillRect(0, 230, 1024, 42);
+
       const grad = bCtx.createLinearGradient(0, 0, 1024, 0);
       grad.addColorStop(0, '#021b79');
-      grad.addColorStop(0.5, '#12a4f9');
+      grad.addColorStop(0.45, '#12a4f9');
       grad.addColorStop(1, '#021b79');
       bCtx.fillStyle = grad;
-      bCtx.fillRect(0, 240, 1024, 32);
+      bCtx.fillRect(0, 252, 1024, 22);
 
-      // Top accent bar
-      bCtx.fillStyle = '#12a4f9';
-      bCtx.fillRect(0, 40, 1024, 12);
-
-      // SP LOCAÇÕES bold text on the side
       bCtx.fillStyle = '#021b79';
-      bCtx.font = '900 82px sans-serif';
-      bCtx.fillText('SP LOCAÇÕES', 120, 175);
+      bCtx.font = '900 58px sans-serif';
+      bCtx.fillText('SP LOCAÇÕES', 92, 162);
 
       bCtx.fillStyle = '#12a4f9';
-      bCtx.font = '700 32px sans-serif';
-      bCtx.fillText('LOCAÇÃO & SEMINOVOS DE SEMIRREBOQUES', 122, 220);
+      bCtx.font = '700 24px sans-serif';
+      bCtx.fillText('LOCAÇÃO E SEMINOVOS DE SEMIRREBOQUES', 96, 205);
     }
     const brandTexture = new THREE.CanvasTexture(brandCanvas);
     brandTexture.anisotropy = 8;
@@ -410,6 +491,25 @@ export default function Trailer3D() {
     panelR.position.set(-trailerLength / 2, 2.05, -trailerWidth / 2 - 0.01);
     panelR.rotation.y = Math.PI;
     trailerGroup.add(panelR);
+
+    const topRailGeo = new THREE.BoxGeometry(trailerLength * 0.98, 0.08, 0.06);
+    const bottomRailGeo = new THREE.BoxGeometry(trailerLength * 0.98, 0.1, 0.06);
+    [-1, 1].forEach((side) => {
+      const topRail = new THREE.Mesh(topRailGeo, chromeMat);
+      topRail.position.set(-trailerLength / 2, 3.27, side * (trailerWidth / 2 + 0.05));
+      trailerGroup.add(topRail);
+
+      const bottomRail = new THREE.Mesh(bottomRailGeo, lightBlueMat);
+      bottomRail.position.set(-trailerLength / 2, 0.86, side * (trailerWidth / 2 + 0.06));
+      trailerGroup.add(bottomRail);
+    });
+
+    const frontPanelGeo = new THREE.BoxGeometry(0.08, trailerHeight * 0.96, trailerWidth * 0.98);
+    const frontPanel = new THREE.Mesh(frontPanelGeo, trailerBodyMat);
+    frontPanel.position.set(0.04, 2.05, 0);
+    frontPanel.castShadow = true;
+    addEdges(frontPanel);
+    trailerGroup.add(frontPanel);
 
     // Trailer Under-Chassis & Side Guards (Ciclista / Estribos)
     const chassisBeamGeo = new THREE.BoxGeometry(trailerLength, 0.3, 1.2);
@@ -476,12 +576,11 @@ export default function Trailer3D() {
     rearLightR.position.set(-trailerLength - 0.08, 0.6, -0.75);
     trailerGroup.add(rearLightR);
 
-    setIsLoaded(true);
-
     // ==========================================
     // 3. MOUSE INTERACTION & ANIMATION LOOP
     // ==========================================
-    const baseAngle = Math.PI - 0.35;
+    const getBaseAngle = () => (isMobileView() ? -Math.PI / 2 - 0.08 : Math.PI + 0.34);
+    let baseAngle = getBaseAngle();
     let targetRotationY = baseAngle;
     let targetRotationX = 0.04;
     let isPointerDown = false;
@@ -489,24 +588,26 @@ export default function Trailer3D() {
     let prevPointerY = 0;
 
     const onMouseMove = (e: MouseEvent) => {
+      if (isMobileView()) return;
       // Calculate normalized mouse coords (-1 to 1) from window
       const normX = (e.clientX / window.innerWidth) * 2 - 1;
       const normY = -(e.clientY / window.innerHeight) * 2 + 1;
 
       if (!isPointerDown) {
-        // Rotate smoothly within a dynamic range around opposite direction
-        targetRotationY = baseAngle - normX * 0.75;
-        targetRotationX = 0.04 - normY * 0.25;
+        targetRotationY = baseAngle + normX * (isMobileView() ? 0.1 : 0.18);
+        targetRotationX = 0.04 - normY * (isMobileView() ? 0.04 : 0.08);
       }
     };
 
     const onPointerDown = (e: PointerEvent) => {
+      if (isMobileView()) return;
       isPointerDown = true;
       prevPointerX = e.clientX;
       prevPointerY = e.clientY;
     };
 
     const onPointerMove = (e: PointerEvent) => {
+      if (isMobileView()) return;
       if (!isPointerDown) return;
       const deltaX = e.clientX - prevPointerX;
       const deltaY = e.clientY - prevPointerY;
@@ -514,7 +615,7 @@ export default function Trailer3D() {
       prevPointerY = e.clientY;
 
       targetRotationY += deltaX * 0.008;
-      targetRotationX = Math.max(-0.4, Math.min(0.4, targetRotationX - deltaY * 0.005));
+      targetRotationX = Math.max(-0.28, Math.min(0.28, targetRotationX - deltaY * 0.004));
     };
 
     const onPointerUp = () => {
@@ -532,6 +633,11 @@ export default function Trailer3D() {
       const w = container.clientWidth || 550;
       const h = container.clientHeight || 420;
       if (w > 0 && h > 0) {
+        baseAngle = getBaseAngle();
+        targetRotationY = baseAngle;
+        rootGroup.position.x = 0.05;
+        rootGroup.scale.setScalar(isMobileView() ? 0.72 : 0.86);
+        applyCameraPose();
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h, false);
@@ -553,10 +659,17 @@ export default function Trailer3D() {
     // Clock for idle floating and suspension
     const clock = new THREE.Clock();
     let animFrameId: number;
+    let didRenderFirstFrame = false;
 
     const animate = () => {
       animFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
+
+      if (isMobileView()) {
+        targetRotationY = baseAngle;
+        targetRotationX = 0.04;
+        trailerGroup.rotation.y += (0 - trailerGroup.rotation.y) * 0.08;
+      }
 
       // Smooth Lerp (Damping) for buttery mouse movement
       rootGroup.rotation.y += (targetRotationY - rootGroup.rotation.y) * 0.06;
@@ -566,11 +679,17 @@ export default function Trailer3D() {
       const idleFloat = Math.sin(elapsedTime * 1.5) * 0.04;
       rootGroup.position.y = -0.6 + idleFloat;
 
-      // Gentle trailer articulation angle (slight bend when turning)
-      const turnDelta = targetRotationY - rootGroup.rotation.y;
-      trailerGroup.rotation.y = THREE.MathUtils.lerp(trailerGroup.rotation.y, turnDelta * 0.25, 0.05);
+      if (!isMobileView()) {
+        // Gentle trailer articulation angle (slight bend when turning)
+        const turnDelta = targetRotationY - rootGroup.rotation.y;
+        trailerGroup.rotation.y = THREE.MathUtils.lerp(trailerGroup.rotation.y, turnDelta * 0.25, 0.05);
+      }
 
       renderer.render(scene, camera);
+      if (!didRenderFirstFrame) {
+        didRenderFirstFrame = true;
+        setIsLoaded(true);
+      }
     };
 
     animate();
@@ -595,11 +714,33 @@ export default function Trailer3D() {
 
   return (
     <div className="trailer-3d-wrapper">
-      <div ref={containerRef} className="trailer-3d-canvas" />
-      <div className={`trailer-3d-hint ${isLoaded ? 'show' : ''}`}>
-        <span className="hint-dot" />
-        Interaja com o mouse ou arraste para girar em 3D
+      <div ref={containerRef} className="trailer-3d-canvas">
+        {useFallback ? <TrailerFallback /> : null}
       </div>
+      {isLoaded ? <span className="trailer-3d-ready" aria-hidden="true" /> : null}
+    </div>
+  );
+}
+
+function TrailerFallback() {
+  return (
+    <div className="trailer-3d-fallback" aria-label="Ilustração de semirreboque SP Locações">
+      <div className="fallback-shadow" />
+      <div className="fallback-trailer">
+        <div className="fallback-brand">
+          <strong>SP LOCAÇÕES</strong>
+          <span>SEMIRREBOQUES</span>
+        </div>
+        <div className="fallback-stripe" />
+      </div>
+      <div className="fallback-cab">
+        <div className="fallback-window" />
+        <div className="fallback-grille" />
+      </div>
+      <div className="fallback-wheel fallback-wheel-1" />
+      <div className="fallback-wheel fallback-wheel-2" />
+      <div className="fallback-wheel fallback-wheel-3" />
+      <div className="fallback-wheel fallback-wheel-4" />
     </div>
   );
 }

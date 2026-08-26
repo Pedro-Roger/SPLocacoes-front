@@ -544,6 +544,10 @@ h3 {
 .card-grid > *:nth-child(4) { animation-delay: 0.18s; }
 .card-grid > *:nth-child(n + 5) { animation-delay: 0.22s; }
 
+.motion-card {
+  min-width: 0;
+}
+
 .equip-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1022,6 +1026,12 @@ textarea.input {
   display: flex;
   height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
 }
 
 .bottom-nav a {
