@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || 'http://localhost:4000';
+
 const nextConfig = {
   images: {
     // Otimização de imagens: formatos modernos desde o Estágio 1
@@ -15,7 +17,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}/api/:path*`,
+        destination: `${apiUrl}/api/:path*`,
       },
     ];
   },
