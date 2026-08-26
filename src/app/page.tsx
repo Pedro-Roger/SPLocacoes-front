@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import EquipmentCard from '@/components/EquipmentCard';
 import WhatsAppFab from '@/components/WhatsAppFab';
+import Trailer3D from '@/components/Trailer3D';
 import { getEquipments } from '@/lib/equipments';
 import { getNews, formatNewsDate } from '@/lib/news';
 import { ArrowRightIcon } from '@/components/Icons';
@@ -15,23 +16,28 @@ export default async function HomePage() {
   return (
     <main>
       <section className="hero">
-        <div className="container">
-          <h1>
-            Soluções em
-            <br />
-            Semirreboques
-            <br />
-            para sua Frota
-          </h1>
-          <p>
-            Tecnologia de ponta e robustez para transformar a logística de sua empresa.
-            Aluguel e venda com garantia de quem entende do mercado pesado.
-          </p>
-          <div className="hero-actions">
-            <Link href="/locacao" className="btn btn-primary">
-              Ver Estoque <span className="btn-arrow">→</span>
-            </Link>
-            <WhatsAppLink />
+        <div className="container hero-container">
+          <div className="hero-content">
+            <h1>
+              Soluções em
+              <br />
+              Semirreboques
+              <br />
+              para sua Frota
+            </h1>
+            <p>
+              Tecnologia de ponta e robustez para transformar a logística de sua empresa.
+              Aluguel e venda com garantia de quem entende do mercado pesado.
+            </p>
+            <div className="hero-actions">
+              <Link href="/locacao" className="btn btn-primary">
+                Ver Estoque <span className="btn-arrow">→</span>
+              </Link>
+              <WhatsAppLink />
+            </div>
+          </div>
+          <div className="hero-3d-col">
+            <Trailer3D />
           </div>
         </div>
       </section>
@@ -47,7 +53,7 @@ export default async function HomePage() {
             <span>clientes atendidos</span>
           </div>
           <div className="trust-card">
-            <strong>Frota 100</strong>
+            <strong>+100</strong>
             <span>equipamentos</span>
           </div>
         </div>

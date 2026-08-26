@@ -13,12 +13,11 @@ export default function Header() {
     <header className={`header ${isAdmin ? '' : 'storefront'}`}>
       <div className="container header-inner">
         <Link href="/" className="logo">
-          <span className="logo-mark">SP</span>
-          <span className="logo-name">
-            SP
-            <br />
-            Locações
-          </span>
+          <img
+            src="/splogo.png"
+            alt="SP Locações"
+            style={{ height: '56px', width: 'auto', maxHeight: '100%', objectFit: 'contain' }}
+          />
         </Link>
         <nav className="header-tabs">
           <Link href="/locacao" className={isLocacao ? 'active' : ''}>
