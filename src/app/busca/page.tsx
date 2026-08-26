@@ -1,21 +1,30 @@
 import type { Metadata } from 'next';
-import CatalogClient from '@/components/CatalogClient';
+import SiteSearchClient from '@/components/SiteSearchClient';
 import { MotionSection } from '@/components/Motion';
-import { getEquipments } from '@/lib/equipments';
+import { getNews } from '@/lib/news';
+import { buildSiteSearchIndex } from '@/lib/site-search';
 
-export const metadata: Metadata = { title: 'Busca' };
+export const metadata: Metadata = {
+  title: 'Busca no site',
+  description:
+    'Pesquise páginas, postagens, atualizações e referências internas da SP Locações.',
+};
 
-// Busca por modelo, marca ou termo — mesma grade do catálogo
+// Busca de conteúdo do site: páginas, postagens e relações internas entre
+// atualizações. Catálogo/equipamentos ficam isolados em /locacao.
 export default async function BuscaPage() {
-  const equipments = await getEquipments();
+  const news = await getNews();
+  const results = buildSiteSearchIndex(news);
 
   return (
     <main className="container">
       <MotionSection>
-        <h1 className="page-title">Busca</h1>
-        <p className="page-subtitle">Encontre por modelo, marca ou categoria</p>
+        <h1 className="page-title">Busca no site</h1>
+        <p className="page-subtitle">
+          Pesquise postagens, páginas e referências internas criadas entre os conteúdos.
+        </p>
       </MotionSection>
-      <CatalogClient initialItems={equipments} />
+      <SiteSearchClient results={results} />
     </main>
   );
 }

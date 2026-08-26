@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import ArticleContent from '@/components/ArticleContent';
 import { getNewsBySlug, formatNewsDate } from '@/lib/news';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -54,7 +55,7 @@ export default async function NoticiaPage({ params }: Props) {
           alt={news.coverImage.alt ?? news.title}
         />
       )}
-      <div className="article-content">{news.content}</div>
+      <ArticleContent content={news.content} />
     </main>
   );
 }

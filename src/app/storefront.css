@@ -635,6 +635,127 @@ body:has(.storefront-page) {
   box-shadow: 0 0 0 2px var(--sf-carbon);
 }
 
+.storefront-page .site-search-box {
+  margin: 18px 0 12px;
+}
+
+.storefront-page .site-search-summary {
+  align-items: baseline;
+  color: var(--sf-slate);
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+
+.storefront-page .site-search-summary strong {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-display);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.storefront-page .site-search-results {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 42px;
+}
+
+.storefront-page .site-search-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-radius-card);
+  box-shadow: var(--sf-shadow-card);
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.storefront-page .site-search-card:hover {
+  border-color: rgba(18, 164, 249, 0.34);
+  box-shadow: var(--sf-shadow-strong);
+  transform: translateY(-2px);
+}
+
+.storefront-page .site-search-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.storefront-page .site-search-meta span {
+  background: rgba(18, 164, 249, 0.12);
+  border: 1px solid rgba(18, 164, 249, 0.22);
+  border-radius: var(--sf-radius-tag);
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  padding: 5px 9px;
+  text-transform: uppercase;
+}
+
+.storefront-page .site-search-card h2 {
+  font-family: var(--sf-font-display);
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 0.95;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.storefront-page .site-search-card h2 a {
+  color: var(--sf-carbon);
+}
+
+.storefront-page .site-search-card p {
+  color: var(--sf-slate);
+  margin: 10px 0 14px;
+}
+
+.storefront-page .site-search-cta {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.storefront-page .site-search-links {
+  border-top: 1px solid var(--sf-line);
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+}
+
+.storefront-page .site-search-links div {
+  display: grid;
+  gap: 6px;
+}
+
+.storefront-page .site-search-links strong {
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.storefront-page .site-search-links a {
+  color: var(--sf-carbon);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(18, 164, 249, 0.45);
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .storefront-page .site-search-card {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  }
+
+  .storefront-page .site-search-card-main:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ---------- Grade de cards ---------- */
 
 .storefront-page .equip-card {
@@ -831,6 +952,18 @@ body:has(.storefront-page) {
   font-family: var(--sf-font-body);
 }
 
+.storefront-page .article-content p {
+  margin: 0 0 16px;
+}
+
+.storefront-page .article-content a {
+  color: var(--sf-carbon);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-color: rgba(18, 164, 249, 0.55);
+  text-underline-offset: 3px;
+}
+
 /* ---------- Formulários (LeadForm) ---------- */
 
 .storefront-page .input {
@@ -851,6 +984,12 @@ body:has(.storefront-page) {
   font-size: 10px;
   letter-spacing: 0.02em;
   color: var(--sf-slate);
+}
+
+.storefront-page .field-hint {
+  color: var(--sf-slate);
+  font-size: 13px;
+  margin: 8px 0 0;
 }
 
 .storefront-page .form-feedback.ok {

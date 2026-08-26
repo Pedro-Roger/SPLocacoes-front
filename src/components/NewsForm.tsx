@@ -62,6 +62,9 @@ export default function NewsForm({ initial }: { initial?: News }) {
       <div>
         <label className="field-label" htmlFor="content">Conteúdo</label>
         <textarea className="input" id="content" name="content" defaultValue={initial?.content} required />
+        <p className="field-hint">
+          Para criar backlink interno, cole /atualizacoes/slug-da-postagem ou cite o título de outra postagem.
+        </p>
       </div>
       <div>
         <label className="field-label" htmlFor="status">Status</label>
