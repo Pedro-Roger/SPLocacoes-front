@@ -3,7 +3,7 @@ import { API_URL } from './api';
 
 export async function getEquipments(): Promise<Equipment[]> {
   const res = await fetch(`${API_URL}/equipamentos?limite=100`, {
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -16,7 +16,7 @@ export async function getEquipments(): Promise<Equipment[]> {
 
 export async function getEquipmentBySlug(slug: string): Promise<Equipment | null> {
   const res = await fetch(`${API_URL}/equipamentos/${slug}`, {
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (res.status === 404) {
