@@ -9,10 +9,10 @@ const ITEMS = [
   { href: '/busca', label: 'Busca', Icon: SearchIcon },
   { href: '/locacao', label: 'Catálogo', Icon: TruckIcon },
   { href: '/favoritos', label: 'Favoritos', Icon: HeartIcon },
-  { href: '/login', label: 'Perfil', Icon: UserIcon },
+  { href: '/painel', label: 'Perfil', Icon: UserIcon },
 ];
 
-// Barra de navegação inferior fixa (mockup): Busca / Catálogo / Favoritos / Perfil
+// Barra de navegação inferior fixa: Busca / Catálogo / Favoritos / Perfil
 export default function BottomNav() {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/painel') || pathname.startsWith('/login');

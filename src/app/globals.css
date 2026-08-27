@@ -921,6 +921,93 @@ textarea.input {
   font-family: inherit;
 }
 
+/* ---------- Login ---------- */
+
+.login-page {
+  min-height: calc(100vh - 56px - var(--bottom-nav-h));
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(18, 164, 249, 0.14), transparent 28%),
+    linear-gradient(145deg, #f7fbff 0%, #eef5fb 44%, #ffffff 100%);
+}
+
+.login-panel {
+  width: min(100%, 440px);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 22px 60px rgba(2, 27, 121, 0.14);
+  padding: 28px;
+  animation: rise-in 0.34s var(--ease-out) both;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86px;
+  margin-bottom: 18px;
+}
+
+.login-brand img {
+  width: min(220px, 76%);
+  height: auto;
+}
+
+.login-copy {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-kicker {
+  margin: 0 0 8px;
+  color: var(--blue-dark);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.login-copy h1 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 30px;
+  line-height: 1.05;
+}
+
+.login-copy p {
+  margin: 10px auto 0;
+  max-width: 310px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.login-form .input {
+  border-radius: 8px;
+  min-height: 48px;
+  background: #f8fafc;
+}
+
+.login-submit {
+  min-height: 50px;
+  margin-top: 4px;
+  border-radius: 8px;
+}
+
 .field-label {
   font-size: 12px;
   font-weight: 600;

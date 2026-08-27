@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 
 // Login administrativo — único ponto de autenticação da plataforma.
@@ -10,6 +10,12 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    api('/auth/me')
+      .then(() => router.replace('/painel'))
+      .catch(() => {});
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,17 +35,31 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="container" style={{ maxWidth: 420 }}>
-      <h1 className="page-title">Área da Equipe</h1>
-      <p className="page-subtitle">Acesso restrito à equipe da SP Locações</p>
-      <form className="form-grid" onSubmit={handleSubmit}>
-        <input className="input" name="email" type="email" placeholder="E-mail" required />
-        <input className="input" name="password" type="password" placeholder="Senha" required />
-        <button className="btn btn-primary" type="submit" disabled={sending}>
-          {sending ? 'Entrando...' : 'Entrar'}
-        </button>
-        {error && <p className="form-feedback error">{error}</p>}
-      </form>
+    <main className="login-page">
+      <section className="login-panel" aria-labelledby="login-title">
+        <div className="login-brand">
+          <img src="/splogo.png" alt="SP Locações" />
+        </div>
+        <div className="login-copy">
+          <p className="login-kicker">Painel administrativo</p>
+          <h1 id="login-title">Área da Equipe</h1>
+          <p>Acesse os anúncios, leads e notícias da operação.</p>
+        </div>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <label>
+            <span>E-mail</span>
+            <input className="input" name="email" type="email" autoComplete="email" required />
+          </label>
+          <label>
+            <span>Senha</span>
+            <input className="input" name="password" type="password" autoComplete="current-password" required />
+          </label>
+          <button className="btn btn-primary login-submit" type="submit" disabled={sending}>
+            {sending ? 'Entrando...' : 'Entrar no painel'}
+          </button>
+          {error && <p className="form-feedback error">{error}</p>}
+        </form>
+      </section>
     </main>
   );
 }
