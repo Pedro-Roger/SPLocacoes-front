@@ -1,9 +1,9 @@
 // Cliente HTTP central — todas as chamadas ao backend passam por aqui.
-// Em produção (NEXT_PUBLIC_API_URL definida), usa /api relativo para aproveitar o
-// rewrite do Next.js (mesmo domínio → cookie sameSite:lax funciona sem configuração extra).
-export const API_URL = process.env.NEXT_PUBLIC_API_URL
-  ? '/api'
-  : 'http://localhost:4000/api';
+const API_ORIGIN = process.env.NEXT_PUBLIC_API_URL?.trim() || 'https://sp-api.linkdecadastro.com.br';
+
+// Server Components precisam de URL absoluta. No navegador, mantemos /api para
+// aproveitar o rewrite do Next e preservar os cookies do painel na mesma origem.
+export const API_URL = typeof window === 'undefined' ? `${API_ORIGIN}/api` : '/api';
 
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {

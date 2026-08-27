@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || 'http://localhost:4000';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || 'https://sp-api.linkdecadastro.com.br';
 
 const nextConfig = {
   images: {
