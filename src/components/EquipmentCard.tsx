@@ -8,10 +8,22 @@ import { getFavorites, toggleFavorite } from '@/lib/favorites';
 import { AxlesIcon, CalendarIcon, HeartIcon, RulerIcon } from './Icons';
 import { MotionItem } from './Motion';
 
-export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
+type Modalidade = 'rental' | 'sale';
+
+// Card do equipamento. `modalidade` controla o preço exibido:
+// - rental: não mostra preço de venda (salePrice escondido)
+// - sale: mostra salePrice ou "Consulte o valor"
+export default function EquipmentCard({
+  equipment,
+  modalidade,
+}: {
+  equipment: Equipment;
+  modalidade?: Modalidade;
+}) {
   const [favorite, setFavorite] = useState(() => getFavorites().includes(equipment.slug));
 
   const cover = equipment.images[0];
+  const showPrice = modalidade === 'sale';
 
   return (
     <MotionItem className="motion-card">
@@ -57,7 +69,13 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
               <AxlesIcon size={12} /> {equipment.axles} Eixos
             </span>
           </div>
-          <p className="equip-card-price">{formatBRL(equipment.priceBRL)}</p>
+          {showPrice && (
+            <p className="equip-card-price">
+              {equipment.salePrice != null
+                ? formatBRL(equipment.salePrice)
+                : 'Consulte o valor'}
+            </p>
+          )}
         </Link>
       </article>
     </MotionItem>

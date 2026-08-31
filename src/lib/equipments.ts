@@ -1,8 +1,11 @@
 import type { Equipment } from './types';
 import { API_URL } from './api';
 
-export async function getEquipments(): Promise<Equipment[]> {
-  const res = await fetch(`${API_URL}/equipamentos?limite=100`, {
+export async function getEquipments(modalidade?: 'rental' | 'sale'): Promise<Equipment[]> {
+  const params = new URLSearchParams({ limite: '100' });
+  if (modalidade) params.set('modalidade', modalidade);
+
+  const res = await fetch(`${API_URL}/equipamentos?${params.toString()}`, {
     cache: 'no-store',
   });
 

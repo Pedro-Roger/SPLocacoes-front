@@ -104,6 +104,7 @@ function contentReferencesPost(content: string, target: News): boolean {
 }
 
 function extractInternalPostSlugs(content: string): string[] {
+  if (!content) return [];
   const matches = content.matchAll(/(?:\/atualizacoes\/|atualizacoes\/)([a-z0-9-]+)/gi);
   return Array.from(matches, (match) => match[1]);
 }
@@ -115,6 +116,7 @@ function pushUnique(list: Array<{ title: string; href: string }>, item: { title:
 }
 
 export function normalize(value: string): string {
+  if (!value) return '';
   return value
     .toLowerCase()
     .normalize('NFD')

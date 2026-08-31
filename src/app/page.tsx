@@ -11,7 +11,8 @@ import { MotionItem, MotionSection } from '@/components/Motion';
 // catálogo e destaque de atualizações (Estágios 1 e 4)
 export default async function HomePage() {
   const [equipments, news] = await Promise.all([getEquipments(), getNews()]);
-  const featured = equipments.slice(0, 4);
+  const featuredEquipments = equipments.filter((e) => e.featured);
+  const featured = (featuredEquipments.length ? featuredEquipments : equipments).slice(0, 4);
   const latestNews = news.slice(0, 2);
 
   return (
@@ -32,7 +33,10 @@ export default async function HomePage() {
             </p>
             <div className="hero-actions">
               <Link href="/locacao" className="btn btn-primary">
-                Ver Estoque <span className="btn-arrow">→</span>
+                Ver Locação <span className="btn-arrow">→</span>
+              </Link>
+              <Link href="/seminovos" className="btn btn-outline-light">
+                Ver Seminovos
               </Link>
               <WhatsAppLink />
             </div>

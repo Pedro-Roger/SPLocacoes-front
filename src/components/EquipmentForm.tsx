@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import type { Equipment, EquipmentImage } from '@/lib/types';
-import { CATEGORY_LABELS } from '@/lib/types';
+import { CATEGORY_LABELS, COMMERCIAL_TYPE_LABELS } from '@/lib/types';
 import ImageGalleryField from './ImageGalleryField';
 
 // Formulário de anúncio — mesmos campos exibidos no catálogo público
@@ -36,10 +36,13 @@ export default function EquipmentForm({ initial }: { initial?: Equipment }) {
     const payload = {
       title,
       brand: f.get('brand'),
+      model: f.get('model'),
       sku: f.get('sku'),
+      commercialType: f.get('commercialType'),
       category: f.get('category'),
       year: num('year'),
       axles: num('axles'),
+      salePrice: num('salePrice'),
       priceBRL: num('priceBRL'),
       lengthM: num('lengthM'),
       capacityM3: num('capacityM3'),
@@ -92,6 +95,21 @@ export default function EquipmentForm({ initial }: { initial?: Equipment }) {
         <input className="input" id="brand" name="brand" defaultValue={initial?.brand} placeholder="Randon" />
       </div>
       <div>
+        <label className="field-label" htmlFor="model">Modelo</label>
+        <input className="input" id="model" name="model" defaultValue={initial?.model} placeholder="Randon 2024" />
+      </div>
+
+      <div>
+        <label className="field-label" htmlFor="commercialType">Modalidade</label>
+        <select className="input" id="commercialType" name="commercialType" defaultValue={initial?.commercialType ?? 'both'}>
+          {Object.entries(COMMERCIAL_TYPE_LABELS).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
         <label className="field-label" htmlFor="sku">SKU (código interno)</label>
         <input className="input" id="sku" name="sku" defaultValue={initial?.sku} placeholder="SP-SR-2024-001" />
       </div>
@@ -116,8 +134,12 @@ export default function EquipmentForm({ initial }: { initial?: Equipment }) {
         <input className="input" id="axles" name="axles" type="number" min={1} defaultValue={initial?.axles} required />
       </div>
       <div>
-        <label className="field-label" htmlFor="priceBRL">Preço (R$)</label>
-        <input className="input" id="priceBRL" name="priceBRL" type="number" defaultValue={initial?.priceBRL} placeholder="185000" />
+        <label className="field-label" htmlFor="salePrice">Preço de Venda (R$) — Seminovos</label>
+        <input className="input" id="salePrice" name="salePrice" type="number" defaultValue={initial?.salePrice} placeholder="185000" />
+      </div>
+      <div>
+        <label className="field-label" htmlFor="priceBRL">Preço de Locação (R$)</label>
+        <input className="input" id="priceBRL" name="priceBRL" type="number" defaultValue={initial?.priceBRL} placeholder="5000" />
       </div>
 
       <div>
@@ -151,6 +173,8 @@ export default function EquipmentForm({ initial }: { initial?: Equipment }) {
         <select className="input" id="availability" name="availability" defaultValue={initial?.availability ?? 'disponivel'}>
           <option value="disponivel">Disponível</option>
           <option value="locado">Locado</option>
+          <option value="reservado">Reservado</option>
+          <option value="vendido">Vendido</option>
           <option value="indisponivel">Indisponível</option>
         </select>
       </div>

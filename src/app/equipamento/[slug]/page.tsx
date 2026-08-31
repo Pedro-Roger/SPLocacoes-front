@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Gallery from '@/components/Gallery';
 import LeadForm from '@/components/LeadForm';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { getEquipmentBySlug } from '@/lib/equipments';
 import { CATEGORY_LABELS, formatBRL } from '@/lib/types';
+import { whatsappRentalMsg, whatsappSaleMsg } from '@/lib/whatsapp';
 import { AxlesIcon, CalendarIcon, CapacityIcon, RulerIcon } from '@/components/Icons';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -14,12 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!equipment) return { title: 'Equipamento não encontrado' };
   return {
     title: equipment.title,
-    description: equipment.description ?? `${equipment.title} disponível para locação.`,
+    description: equipment.description ?? `${equipment.title} disponível na SP Locações.`,
   };
 }
 
-// Detalhe do equipamento — carrossel, preço, especificações-chave,
-// formulário "Tenho Interesse" e WhatsApp com mensagem pré-preenchida
+// Detalhe do equipamento — galeria, preço por modalidade, especificações,
+// formulário "Tenho Interesse" e WhatsApp com mensagem pré-preenchida.
 export default async function EquipamentoPage({ params }: Props) {
   const { slug } = await params;
   const equipment = await getEquipmentBySlug(slug);
@@ -29,9 +31,14 @@ export default async function EquipamentoPage({ params }: Props) {
     ? equipment.images
     : [{ url: '/placeholder-trailer.svg', alt: equipment.title }];
 
-  const whatsappMsg = `Olá! Tenho interesse no ${equipment.title} (${equipment.year}). Ele está disponível?`;
+  const isRental = equipment.commercialType === 'rental';
+  const isSale = equipment.commercialType === 'sale';
+  const showSalePrice = !isRental;
 
-  // Dados estruturados por anúncio (Estágio 4)
+  const whatsappMsg = isRental
+    ? whatsappRentalMsg(equipment.title)
+    : whatsappSaleMsg(equipment.title);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -41,10 +48,10 @@ export default async function EquipamentoPage({ params }: Props) {
     brand: equipment.brand
       ? { '@type': 'Brand', name: equipment.brand }
       : undefined,
-    offers: equipment.priceBRL
+    offers: showSalePrice
       ? {
           '@type': 'Offer',
-          price: equipment.priceBRL,
+          price: equipment.salePrice ?? equipment.priceBRL ?? 0,
           priceCurrency: 'BRL',
           availability:
             equipment.availability === 'disponivel'
@@ -60,15 +67,17 @@ export default async function EquipamentoPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="carousel">
-        {images.map((img, i) => (
-          <img key={i} src={img.url} alt={img.alt || equipment.title} loading={i === 0 ? 'eager' : 'lazy'} />
-        ))}
-      </div>
-
       <div className="container">
+        <Gallery images={images} />
+
         <div style={{ padding: '16px 0 4px' }}>
-          <p className="detail-price">{formatBRL(equipment.priceBRL)}</p>
+          {showSalePrice && (
+            <p className="detail-price">
+              {equipment.salePrice != null
+                ? formatBRL(equipment.salePrice)
+                : 'Consulte o valor'}
+            </p>
+          )}
           <p className="detail-title">{equipment.title}</p>
         </div>
 

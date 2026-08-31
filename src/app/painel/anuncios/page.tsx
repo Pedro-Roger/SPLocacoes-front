@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import type { Equipment } from '@/lib/types';
-import { CATEGORY_LABELS } from '@/lib/types';
+import { CATEGORY_LABELS, COMMERCIAL_TYPE_LABELS } from '@/lib/types';
 import { EditIcon, SearchIcon, TrashIcon } from '@/components/Icons';
 import { usePainelResource } from '@/hooks/usePainelResource';
 
@@ -78,6 +78,7 @@ export default function AnunciosPage() {
               <strong>{e.title}</strong>
               <small>
                 {e.sku ? `SKU: ${e.sku} · ` : ''}
+                {COMMERCIAL_TYPE_LABELS[e.commercialType ?? 'both'] ?? ''} ·{' '}
                 {CATEGORY_LABELS[e.category] ?? e.category} · {e.axles} eixos
               </small>
               <div style={{ marginTop: 4 }}>

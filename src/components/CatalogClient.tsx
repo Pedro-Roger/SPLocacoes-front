@@ -12,15 +12,25 @@ const PAGE_SIZE = 8;
 type Filters = {
   categoria: string;
   eixos: string;
+  ano: string;
   disponibilidade: string;
 };
 
-const EMPTY_FILTERS: Filters = { categoria: '', eixos: '', disponibilidade: '' };
+const EMPTY_FILTERS: Filters = { categoria: '', eixos: '', ano: '', disponibilidade: '' };
 
-// Catálogo: busca textual + filtros (categoria/eixos/disponibilidade, mesmos
-// critérios já suportados pela API) + "Carregar mais", sem recarregar a página
-// (critério de aceite do Estágio 2)
-export default function CatalogClient({ initialItems }: { initialItems: Equipment[] }) {
+type Modalidade = 'rental' | 'sale';
+
+// Catálogo: busca textual + filtros (categoria/eixos/ano/disponibilidade) +
+// "Carregar mais", sem recarregar a página.
+// `modalidade` controla se é Locação (rental) ou Seminovos (sale) — afeta
+// o preço exibido no card (rental puro não mostra preço de venda).
+export default function CatalogClient({
+  initialItems,
+  modalidade,
+}: {
+  initialItems: Equipment[];
+  modalidade?: Modalidade;
+}) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [visible, setVisible] = useState(PAGE_SIZE);
@@ -30,14 +40,20 @@ export default function CatalogClient({ initialItems }: { initialItems: Equipmen
     [initialItems]
   );
 
+  const yearOptions = useMemo(
+    () => Array.from(new Set(initialItems.map((e) => e.year))).sort((a, b) => b - a),
+    [initialItems]
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return initialItems.filter((e) => {
       if (filters.categoria && e.category !== filters.categoria) return false;
       if (filters.eixos && e.axles !== Number(filters.eixos)) return false;
+      if (filters.ano && e.year !== Number(filters.ano)) return false;
       if (filters.disponibilidade && e.availability !== filters.disponibilidade) return false;
       if (!q) return true;
-      return [e.title, e.brand, CATEGORY_LABELS[e.category] ?? e.category, String(e.year)]
+      return [e.title, e.brand, e.model, CATEGORY_LABELS[e.category] ?? e.category, String(e.year)]
         .join(' ')
         .toLowerCase()
         .includes(q);
@@ -45,7 +61,9 @@ export default function CatalogClient({ initialItems }: { initialItems: Equipmen
   }, [initialItems, query, filters]);
 
   const items = filtered.slice(0, visible);
-  const hasActiveFilters = Boolean(query || filters.categoria || filters.eixos || filters.disponibilidade);
+  const hasActiveFilters = Boolean(
+    query || filters.categoria || filters.eixos || filters.ano || filters.disponibilidade
+  );
 
   function updateFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -59,7 +77,7 @@ export default function CatalogClient({ initialItems }: { initialItems: Equipmen
           <SearchIcon size={18} />
           <input
             type="search"
-            placeholder="Buscar modelo, marca ou categoria..."
+            placeholder="Buscar equipamento..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -101,6 +119,20 @@ export default function CatalogClient({ initialItems }: { initialItems: Equipmen
 
           <select
             className="input"
+            aria-label="Filtrar por ano"
+            value={filters.ano}
+            onChange={(e) => updateFilter('ano', e.target.value)}
+          >
+            <option value="">Todos os anos</option>
+            {yearOptions.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="input"
             aria-label="Filtrar por disponibilidade"
             value={filters.disponibilidade}
             onChange={(e) => updateFilter('disponibilidade', e.target.value)}
@@ -130,13 +162,24 @@ export default function CatalogClient({ initialItems }: { initialItems: Equipmen
       </MotionSection>
 
       {items.length === 0 ? (
-        <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '32px 0' }}>
-          Nenhum equipamento encontrado{query ? ` para “${query}”` : ''} com os filtros selecionados.
-        </p>
+        <div className="empty-state">
+          <p>Nenhum equipamento encontrado com esses filtros.</p>
+          <button
+            type="button"
+            className="btn btn-outline btn-sm"
+            onClick={() => {
+              setQuery('');
+              setFilters(EMPTY_FILTERS);
+              setVisible(PAGE_SIZE);
+            }}
+          >
+            Limpar filtros
+          </button>
+        </div>
       ) : (
         <div className="card-grid">
           {items.map((e) => (
-            <EquipmentCard key={e.slug} equipment={e} />
+            <EquipmentCard key={e.slug} equipment={e} modalidade={modalidade} />
           ))}
         </div>
       )}
