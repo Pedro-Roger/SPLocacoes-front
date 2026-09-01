@@ -2,6 +2,7 @@ import Link from 'next/link';
 import EquipmentCard from '@/components/EquipmentCard';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import Parallax from '@/components/Parallax';
+import AutoplayVideo from '@/components/AutoplayVideo';
 import { getEquipments } from '@/lib/equipments';
 import { getNews, formatNewsDate } from '@/lib/news';
 import { ArrowRightIcon } from '@/components/Icons';
@@ -18,15 +19,10 @@ export default async function HomePage() {
   return (
     <main>
       <section className="hero hero-video">
-        <video
+        <AutoplayVideo
           className="hero-video-media"
           src="/video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
+          ariaHidden
         />
         <div className="hero-video-overlay" aria-hidden="true" />
         <div className="container hero-container hero-video-content">
@@ -99,16 +95,7 @@ export default async function HomePage() {
                 </Link>
               </div>
               <div className="about-media">
-                <video
-                  className="about-video"
-                  src="/sobre.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-hidden="true"
-                />
+                <AutoplayVideo className="about-video" src="/sobre.mp4" ariaHidden />
               </div>
             </div>
             <div className="about-stats">
@@ -165,7 +152,7 @@ export default async function HomePage() {
       <section className="video-banner cta-banner">
         <div className="video-banner-media" aria-hidden="true">
           <Parallax speed={-0.18}>
-            <video src="/cta.mp4" autoPlay muted loop playsInline preload="metadata" />
+            <AutoplayVideo src="/cta.mp4" ariaHidden />
           </Parallax>
         </div>
         <div className="video-banner-overlay" aria-hidden="true" />

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Parallax from '@/components/Parallax';
+import AutoplayVideo from '@/components/AutoplayVideo';
 
 type VideoBannerProps = {
   src: string;
@@ -15,7 +16,7 @@ export default function VideoBanner({ src, title, subtitle, children }: VideoBan
     <section className="video-banner">
       <div className="video-banner-media" aria-hidden="true">
         <Parallax speed={-0.18}>
-          <video src={src} autoPlay muted loop playsInline preload="metadata" />
+          <AutoplayVideo src={src} ariaHidden />
         </Parallax>
       </div>
       <div className="video-banner-overlay" aria-hidden="true" />

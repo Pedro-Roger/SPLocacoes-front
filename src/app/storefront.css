@@ -175,6 +175,15 @@ body:has(.storefront-page) {
   height: 100%;
   object-fit: cover;
   z-index: -2;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.storefront-page .video-banner-media video,
+.storefront-page .about-video,
+.storefront-page .hero-video-media {
+  pointer-events: none;
 }
 
 .storefront-page .hero-video-overlay {
