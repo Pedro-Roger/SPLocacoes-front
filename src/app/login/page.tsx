@@ -40,11 +40,6 @@ export default function LoginPage() {
         <div className="login-brand">
           <img src="/splogo.png" alt="SP Locações" />
         </div>
-        <div className="login-copy">
-          <p className="login-kicker">Painel administrativo</p>
-          <h1 id="login-title">Área da Equipe</h1>
-          <p>Acesse os anúncios, leads e notícias da operação.</p>
-        </div>
         <form className="login-form" onSubmit={handleSubmit}>
           <label>
             <span>E-mail</span>

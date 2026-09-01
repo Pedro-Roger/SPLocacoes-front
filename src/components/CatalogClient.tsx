@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import type { Equipment } from '@/lib/types';
 import { AVAILABILITY_LABELS, CATEGORY_LABELS } from '@/lib/types';
 import EquipmentCard from './EquipmentCard';
+import Select from './Select';
 import { SearchIcon } from './Icons';
 import { MotionSection } from './Motion';
 
@@ -89,61 +90,33 @@ export default function CatalogClient({
 
       <MotionSection delay={0.05}>
         <div className="filter-bar">
-          <select
-            className="input"
-            aria-label="Filtrar por categoria"
+          <Select
+            label="Todas as categorias"
             value={filters.categoria}
-            onChange={(e) => updateFilter('categoria', e.target.value)}
-          >
-            <option value="">Todas as categorias</option>
-            {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+            options={Object.entries(CATEGORY_LABELS).map(([value, label]) => ({ value, label }))}
+            onChange={(v) => updateFilter('categoria', v)}
+          />
 
-          <select
-            className="input"
-            aria-label="Filtrar por eixos"
+          <Select
+            label="Todos os eixos"
             value={filters.eixos}
-            onChange={(e) => updateFilter('eixos', e.target.value)}
-          >
-            <option value="">Todos os eixos</option>
-            {axleOptions.map((axles) => (
-              <option key={axles} value={axles}>
-                {axles} eixos
-              </option>
-            ))}
-          </select>
+            options={axleOptions.map((axles) => ({ value: String(axles), label: `${axles} eixos` }))}
+            onChange={(v) => updateFilter('eixos', v)}
+          />
 
-          <select
-            className="input"
-            aria-label="Filtrar por ano"
+          <Select
+            label="Todos os anos"
             value={filters.ano}
-            onChange={(e) => updateFilter('ano', e.target.value)}
-          >
-            <option value="">Todos os anos</option>
-            {yearOptions.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+            options={yearOptions.map((year) => ({ value: String(year), label: String(year) }))}
+            onChange={(v) => updateFilter('ano', v)}
+          />
 
-          <select
-            className="input"
-            aria-label="Filtrar por disponibilidade"
+          <Select
+            label="Todas as disponibilidades"
             value={filters.disponibilidade}
-            onChange={(e) => updateFilter('disponibilidade', e.target.value)}
-          >
-            <option value="">Todas as disponibilidades</option>
-            {Object.entries(AVAILABILITY_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+            options={Object.entries(AVAILABILITY_LABELS).map(([value, label]) => ({ value, label }))}
+            onChange={(v) => updateFilter('disponibilidade', v)}
+          />
 
           {hasActiveFilters && (
             <button

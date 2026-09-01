@@ -56,8 +56,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="pt-BR"
       className={`${manrope.variable} ${barlowCondensed.variable} ${inter.variable} ${ibmPlexMono.variable}`}
+      suppressHydrationWarning
     >
-      <body>
+      <body suppressHydrationWarning>
         <Header />
         <StorefrontScope>{children}</StorefrontScope>
         <BottomNav />

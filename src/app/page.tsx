@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import EquipmentCard from '@/components/EquipmentCard';
 import WhatsAppFab from '@/components/WhatsAppFab';
-import Trailer3D from '@/components/Trailer3D';
+import Parallax from '@/components/Parallax';
 import { getEquipments } from '@/lib/equipments';
 import { getNews, formatNewsDate } from '@/lib/news';
 import { ArrowRightIcon } from '@/components/Icons';
 import { MotionItem, MotionSection } from '@/components/Motion';
 
-// Início — hero institucional, selos de confiança, grade inicial do
-// catálogo e destaque de atualizações (Estágios 1 e 4)
+// Início — hero em vídeo full-bleed, selos de confiança, sobre nós,
+// grade inicial do catálogo e destaque de atualizações
 export default async function HomePage() {
   const [equipments, news] = await Promise.all([getEquipments(), getNews()]);
   const featuredEquipments = equipments.filter((e) => e.featured);
@@ -17,8 +17,19 @@ export default async function HomePage() {
 
   return (
     <main>
-      <section className="hero">
-        <div className="container hero-container">
+      <section className="hero hero-video">
+        <video
+          className="hero-video-media"
+          src="/video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
+        <div className="hero-video-overlay" aria-hidden="true" />
+        <div className="container hero-container hero-video-content">
           <MotionSection className="hero-content">
             <h1>
               Soluções em
@@ -41,9 +52,6 @@ export default async function HomePage() {
               <WhatsAppLink />
             </div>
           </MotionSection>
-          <MotionSection className="hero-3d-col" delay={0.12}>
-            <Trailer3D />
-          </MotionSection>
         </div>
       </section>
 
@@ -51,23 +59,74 @@ export default async function HomePage() {
         <MotionSection className="trust-row">
           <MotionItem>
             <div className="trust-card">
-            <strong>+10 Anos</strong>
-            <span>de mercado</span>
+              <strong>+10 Anos</strong>
+              <span>de mercado</span>
             </div>
           </MotionItem>
           <MotionItem delay={0.05}>
             <div className="trust-card">
-            <strong>+500</strong>
-            <span>clientes atendidos</span>
+              <strong>+500</strong>
+              <span>clientes atendidos</span>
             </div>
           </MotionItem>
           <MotionItem delay={0.1}>
             <div className="trust-card">
-            <strong>+100</strong>
-            <span>equipamentos</span>
+              <strong>+100</strong>
+              <span>equipamentos</span>
             </div>
           </MotionItem>
         </MotionSection>
+
+        <section className="section about-section">
+          <Parallax speed={0.08} className="about-parallax">
+            <div className="section-head">
+              <h2>Sobre Nós</h2>
+            </div>
+            <div className="about-grid">
+              <div className="about-copy">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                  nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                <p>
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                  fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                  culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                <Link href="/locacao" className="about-cta">
+                  Conheça nossa frota <ArrowRightIcon size={14} />
+                </Link>
+              </div>
+              <div className="about-media">
+                <video
+                  className="about-video"
+                  src="/sobre.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+            <div className="about-stats">
+              <div className="about-stat">
+                <strong>2014</strong>
+                <span>fundação</span>
+              </div>
+              <div className="about-stat">
+                <strong>SP</strong>
+                <span>são paulo · brasil</span>
+              </div>
+              <div className="about-stat">
+                <strong>24h</strong>
+                <span>suporte logístico</span>
+              </div>
+            </div>
+          </Parallax>
+        </section>
 
         <MotionSection className="section">
           <div className="section-head">
@@ -102,6 +161,27 @@ export default async function HomePage() {
           ))}
         </MotionSection>
       </div>
+
+      <section className="video-banner cta-banner">
+        <div className="video-banner-media" aria-hidden="true">
+          <Parallax speed={-0.18}>
+            <video src="/cta.mp4" autoPlay muted loop playsInline preload="metadata" />
+          </Parallax>
+        </div>
+        <div className="video-banner-overlay" aria-hidden="true" />
+        <div className="container video-banner-content">
+          <h2>Pronto para expandir sua frota?</h2>
+          <p>Fale com um consultor e receba uma proposta sob medida para sua operação.</p>
+          <a
+            className="btn btn-primary"
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''}?text=${encodeURIComponent('Olá! Quero uma proposta da SP Locações.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Falar Consultor <span className="btn-arrow">→</span>
+          </a>
+        </div>
+      </section>
 
       <WhatsAppFab />
     </main>

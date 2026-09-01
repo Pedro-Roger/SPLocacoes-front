@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import CatalogClient from '@/components/CatalogClient';
 import WhatsAppFab from '@/components/WhatsAppFab';
-import { MotionSection } from '@/components/Motion';
+import VideoBanner from '@/components/VideoBanner';
 import { getEquipments } from '@/lib/equipments';
 
 export const metadata: Metadata = {
@@ -14,14 +14,29 @@ export default async function SeminovosPage() {
   const equipments = await getEquipments('sale');
 
   return (
-    <main className="container">
-      <MotionSection>
-        <h1 className="page-title">Semirreboques Seminovos</h1>
-        <p className="page-subtitle">
-          {equipments.length} seminovos disponíveis
-        </p>
-      </MotionSection>
-      <CatalogClient initialItems={equipments} modalidade="sale" />
+    <main>
+      <VideoBanner
+        src="/seminovos.mp4"
+        title="Semirreboques Seminovos"
+        subtitle={`${equipments.length} seminovos disponíveis`}
+      >
+        <div className="video-banner-actions">
+          <a
+            className="btn btn-primary"
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''}?text=${encodeURIComponent('Olá! Gostaria de comprar um semirreboque seminovo da SP Locações.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Falar com Vendedor <span className="btn-arrow">→</span>
+          </a>
+          <a className="btn btn-outline-light" href="#catalogo">
+            Ver Estoque
+          </a>
+        </div>
+      </VideoBanner>
+      <div className="container" id="catalogo">
+        <CatalogClient initialItems={equipments} modalidade="sale" />
+      </div>
       <WhatsAppFab />
     </main>
   );
