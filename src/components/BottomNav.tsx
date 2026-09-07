@@ -8,7 +8,7 @@ import { SearchIcon, TruckIcon, HeartIcon, UserIcon } from './Icons';
 const ITEMS = [
   { href: '/busca', label: 'Busca', Icon: SearchIcon },
   { href: '/locacao', label: 'Catálogo', Icon: TruckIcon },
-  { href: '/favoritos', label: 'Favoritos', Icon: HeartIcon },
+  { href: '/locacao', label: 'Locação', Icon: HeartIcon },
   { href: '/painel', label: 'Perfil', Icon: UserIcon },
 ];
 
