@@ -748,18 +748,17 @@ body:has(.storefront-page) {
 }
 
 .storefront-page .about-stats {
-  display: grid;
-  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 56px;
 }
 
 .storefront-page .about-stat {
-  /* Dados planos — sem fundo, borda ou sombra de cartão clicável */
-  padding: 10px 0;
+  /* Dados planos — número e rótulo agrupados, sem divisórias */
+  padding: 0;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid var(--sf-line);
+  gap: 10px;
 }
 
 .storefront-page .about-stat strong {
@@ -1449,6 +1448,54 @@ body:has(.storefront-page) {
   }
 }
 
+/* ---------- Carrossel lento (Destaques e Atualizações) ---------- */
+
+.storefront-page .marquee {
+  overflow: hidden;
+  /* fade nas bordas para a entrada/saída não "cortar" seca */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.storefront-page .marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: sf-marquee 60s linear infinite;
+  will-change: transform;
+}
+
+.storefront-page .marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Cards de equipamento com largura fixa dentro do trilho */
+.storefront-page .marquee-track > * {
+  flex-shrink: 0;
+  width: clamp(260px, 26vw, 340px);
+}
+
+.storefront-page .marquee-track-news {
+  animation-duration: 80s;
+}
+
+.storefront-page .marquee-track-news .news-card {
+  width: min(420px, 82vw);
+}
+
+@keyframes sf-marquee {
+  to {
+    /* metade do trilho (as 2 metades são idênticas) menos metade do gap */
+    transform: translateX(calc(-50% - 10px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storefront-page .marquee-track {
+    animation: none;
+  }
+}
+
 /* ---------- Faixa de Parceiros (full-bleed, "PARCERIAS QUE LEVAM...") ---------- */
 
 .storefront-page .partners-band {
@@ -1494,7 +1541,7 @@ body:has(.storefront-page) {
   font-family: var(--sf-font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(44px, 7vw, 96px);
+  font-size: clamp(32px, 4.5vw, 60px);
   line-height: 0.95;
   letter-spacing: -0.02em;
   color: var(--sf-red);
@@ -1512,22 +1559,38 @@ body:has(.storefront-page) {
 }
 
 .storefront-page .partners-logo {
-  font-family: var(--sf-font-display);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: clamp(22px, 2.4vw, 30px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   color: rgba(255, 255, 255, 0.55);
   transition: color var(--dur-fast) ease;
 }
 
+/* Placeholder de logo monocromático (estilo "Our Clients" da atomhawk).
+   Trocar por <img> quando os logos reais forem fornecidos. */
+.storefront-page .partners-logo-mark {
+  width: clamp(64px, 7vw, 92px);
+  height: auto;
+  aspect-ratio: 1;
+  display: block;
+}
+
+.storefront-page .partners-logo-name {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(14px, 1.4vw, 17px);
+}
+
 .storefront-page .partners-logo:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 @media (max-width: 640px) {
   .storefront-page .partners-title {
-    font-size: clamp(36px, 11vw, 56px);
+    font-size: clamp(26px, 7vw, 40px);
   }
 
   .storefront-page .partners-row {
@@ -1538,6 +1601,10 @@ body:has(.storefront-page) {
   }
 
   .storefront-page .partners-logo {
-    font-size: 18px;
+    gap: 8px;
+  }
+
+  .storefront-page .partners-logo-name {
+    font-size: 12px;
   }
 }

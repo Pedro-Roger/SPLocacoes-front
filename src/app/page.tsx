@@ -104,10 +104,6 @@ export default async function HomePage() {
                 <span>fundação</span>
               </div>
               <div className="about-stat">
-                <strong>SP</strong>
-                <span>são paulo · brasil</span>
-              </div>
-              <div className="about-stat">
                 <strong>24h</strong>
                 <span>suporte logístico</span>
               </div>
@@ -141,10 +137,13 @@ export default async function HomePage() {
             <h2>Destaques do Estoque</h2>
             <Link href="/locacao">Ver todos</Link>
           </div>
-          <div className="card-grid">
-            {featured.map((e) => (
-              <EquipmentCard key={e.slug} equipment={e} />
-            ))}
+          {/* Carrossel lento: 2 metades idênticas → loop infinito no CSS */}
+          <div className="marquee">
+            <div className="marquee-track">
+              {[...featured, ...featured].map((e, i) => (
+                <EquipmentCard key={`${e.slug}-${i}`} equipment={e} />
+              ))}
+            </div>
           </div>
         </MotionSection>
 
@@ -153,20 +152,24 @@ export default async function HomePage() {
             <h2>Atualizações</h2>
             <Link href="/atualizacoes">Ver mural</Link>
           </div>
-          {latestNews.map((n) => (
-            <Link key={n.slug} href={`/atualizacoes/${n.slug}`} className="news-card">
-              <div className="news-card-body">
-                <span className="news-card-date">
-                  {formatNewsDate(n.publishedAt ?? n.createdAt)}
-                </span>
-                <h3>{n.title}</h3>
-                <p>{n.excerpt}</p>
-                <span className="news-card-cta">
-                  Ler mais <ArrowRightIcon size={14} />
-                </span>
-              </div>
-            </Link>
-          ))}
+          <div className="marquee">
+            <div className="marquee-track marquee-track-news">
+              {[...latestNews, ...latestNews, ...latestNews, ...latestNews].map((n, i) => (
+                <Link key={`${n.slug}-${i}`} href={`/atualizacoes/${n.slug}`} className="news-card">
+                  <div className="news-card-body">
+                    <span className="news-card-date">
+                      {formatNewsDate(n.publishedAt ?? n.createdAt)}
+                    </span>
+                    <h3>{n.title}</h3>
+                    <p>{n.excerpt}</p>
+                    <span className="news-card-cta">
+                      Ler mais <ArrowRightIcon size={14} />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </MotionSection>
       </div>
 
@@ -179,10 +182,18 @@ export default async function HomePage() {
             SUA CARGA MAIS LONGE
           </h2>
           <div className="partners-row">
-            {['RANDON', 'FACCHINI', 'LIBRELATO', 'NOMA', 'GUERRA', 'RODEO'].map((name) => (
-              <span key={name} className="partners-logo">
-                {name}
-              </span>
+            {PARTNERS.map(({ name, mark }) => (
+              <div key={name} className="partners-logo">
+                <svg
+                  className="partners-logo-mark"
+                  viewBox="0 0 64 64"
+                  role="img"
+                  aria-label={`Logo ${name}`}
+                >
+                  {mark}
+                </svg>
+                <span className="partners-logo-name">{name}</span>
+              </div>
             ))}
           </div>
         </div>
@@ -226,3 +237,63 @@ function WhatsAppLink() {
     </a>
   );
 }
+
+// Placeholders de logo dos parceiros (estilo logo wall monocromático,
+// como "Our Clients" da atomhawk). Trocar por <img> quando os logos
+// reais forem fornecidos.
+const PARTNERS: { name: string; mark: React.ReactNode }[] = [
+  {
+    name: 'RANDON',
+    mark: (
+      <>
+        <polygon points="32,6 56,20 56,44 32,58 8,44 8,20" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle cx="32" cy="32" r="9" fill="currentColor" />
+      </>
+    ),
+  },
+  {
+    name: 'FACCHINI',
+    mark: (
+      <>
+        <rect x="10" y="10" width="44" height="44" fill="none" stroke="currentColor" strokeWidth="4" />
+        <path d="M22 42V22h20" fill="none" stroke="currentColor" strokeWidth="4" />
+      </>
+    ),
+  },
+  {
+    name: 'LIBRELATO',
+    mark: (
+      <>
+        <circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" strokeWidth="4" />
+        <path d="M20 36c4-10 20-10 24 0" fill="none" stroke="currentColor" strokeWidth="4" />
+      </>
+    ),
+  },
+  {
+    name: 'NOMA',
+    mark: (
+      <>
+        <path d="M32 8l6.8 13.8L54 24l-11 10.7 2.6 15.1L32 42.8 18.4 49.8 21 34.7 10 24l15.2-2.2z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+      </>
+    ),
+  },
+  {
+    name: 'GUERRA',
+    mark: (
+      <>
+        <path d="M32 8l20 8v14c0 12-8.5 20.5-20 26-11.5-5.5-20-14-20-26V16z" fill="none" stroke="currentColor" strokeWidth="4" />
+        <path d="M24 32l6 6 12-12" fill="none" stroke="currentColor" strokeWidth="4" />
+      </>
+    ),
+  },
+  {
+    name: 'RODEO',
+    mark: (
+      <>
+        <circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle cx="32" cy="32" r="10" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle cx="32" cy="32" r="3" fill="currentColor" />
+      </>
+    ),
+  },
+];
