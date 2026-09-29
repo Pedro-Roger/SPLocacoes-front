@@ -43,7 +43,7 @@ export default async function HomePage() {
                 Ver Locação <span className="btn-arrow">→</span>
               </Link>
               <Link href="/seminovos" className="btn btn-outline-light">
-                Ver Seminovos
+                Ver Venda de Seminovos
               </Link>
               <WhatsAppLink />
             </div>
@@ -115,6 +115,27 @@ export default async function HomePage() {
           </Parallax>
         </section>
 
+        <section className="section location-section">
+          <div className="section-head">
+            <h2>Onde estamos</h2>
+          </div>
+          <div className="location-card">
+            <span className="location-coords">São Paulo · Brasil</span>
+            <p>
+              Atendemos todo o estado de São Paulo e região. Visite nosso pátio, conheça a frota
+              de perto e fale com nossa equipe comercial.
+            </p>
+            <a
+              className="btn btn-outline"
+              href="https://www.google.com/maps/search/?api=1&query=SP+Locacoes"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Como chegar <ArrowRightIcon size={14} />
+            </a>
+          </div>
+        </section>
+
         <MotionSection className="section">
           <div className="section-head">
             <h2>Destaques do Estoque</h2>
@@ -148,6 +169,24 @@ export default async function HomePage() {
           ))}
         </MotionSection>
       </div>
+
+      <MotionSection className="partners-band">
+        <div className="container partners-inner">
+          <span className="partners-eyebrow">empresas que confiam</span>
+          <h2 className="partners-title">
+            PARCERIAS QUE LEVAM
+            <br />
+            SUA CARGA MAIS LONGE
+          </h2>
+          <div className="partners-row">
+            {['RANDON', 'FACCHINI', 'LIBRELATO', 'NOMA', 'GUERRA', 'RODEO'].map((name) => (
+              <span key={name} className="partners-logo">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </MotionSection>
 
       <section className="video-banner cta-banner">
         <div className="video-banner-media" aria-hidden="true">

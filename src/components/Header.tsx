@@ -11,10 +11,20 @@ const WHATSAPP_URL = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ??
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const isLocacao = pathname === '/' || pathname.startsWith('/locacao') || pathname.startsWith('/equipamento');
   const isSeminovos = pathname.startsWith('/seminovos');
   const isAdmin = pathname.startsWith('/painel') || pathname.startsWith('/login');
   const isAtualizacoes = pathname.startsWith('/atualizacoes');
+
+  // Efeito de scroll do storefront (desktop): após ~40px o header ganha
+  // fundo sólido compacto e o logo encolhe. Só afeta a classe `.scrolled`.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Fecha com ESC e trava scroll do body com menu aberto
   useEffect(() => {
@@ -51,7 +61,7 @@ export default function Header() {
   return (
     <>
       <motion.header
-        className="header storefront"
+        className={`header storefront ${scrolled ? 'scrolled' : ''}`}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
@@ -62,7 +72,8 @@ export default function Header() {
               <img
                 src="/splogo.png"
                 alt="SP Locações"
-                style={{ height: '56px', width: 'auto', maxHeight: '100%', objectFit: 'contain' }}
+                className="header-logo-img"
+                style={{ height: 'var(--header-logo-h, 56px)', width: 'auto', maxHeight: '100%', objectFit: 'contain' }}
               />
             </Link>
           </motion.div>
@@ -72,7 +83,7 @@ export default function Header() {
               Locação
             </Link>
             <Link href="/seminovos" className={isSeminovos ? 'active' : ''}>
-              Seminovos
+              Venda de Seminovos
             </Link>
             <Link href="/atualizacoes" className={isAtualizacoes ? 'active' : ''}>
               Atualizações
@@ -132,7 +143,7 @@ export default function Header() {
                   Locação
                 </Link>
                 <Link href="/seminovos" className={isSeminovos ? 'active' : ''}>
-                  Seminovos
+                  Venda de Seminovos
                 </Link>
                 <Link href="/atualizacoes" className={isAtualizacoes ? 'active' : ''}>
                   Notícias

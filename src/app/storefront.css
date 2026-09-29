@@ -88,6 +88,24 @@ body:has(.storefront-page) {
   border-bottom: 0;
   box-shadow: 0 1px 0 rgba(2, 27, 121, 0.08);
   padding: 12px 0 8px;
+  /* Altura do logo controlada aqui para permitir o encolhimento no scroll */
+  --header-logo-h: 56px;
+  transition: background-color var(--dur-fast) ease, box-shadow var(--dur-med) var(--ease-out),
+    padding var(--dur-med) var(--ease-out);
+}
+
+.header.storefront .header-logo-img {
+  transition: height var(--dur-med) var(--ease-out);
+}
+
+/* Compactação do header no scroll (storefront) — reference de comportamento
+   do atomhawk (altura total diminui), mantendo a marca clara da SP Locações.
+   Reduz o padding vertical + encolhe o logo; o fundo continua claro/solido. */
+.header.storefront.scrolled {
+  padding: 6px 0 4px;
+  background: rgba(248, 251, 253, 0.97);
+  box-shadow: 0 1px 0 rgba(2, 27, 121, 0.06), 0 20px 42px -30px rgba(1, 13, 63, 0.52);
+  --header-logo-h: 34px;
 }
 
 .header.storefront .header-inner {
@@ -131,12 +149,12 @@ body:has(.storefront-page) {
 }
 
 .header.storefront .header-tabs a {
-  padding: 10px 18px;
+  padding: 14px 22px;
   border-radius: var(--sf-radius-pill);
   color: var(--sf-slate);
   font-family: var(--sf-font-body);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 15px;
   transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
 }
 
@@ -192,6 +210,29 @@ body:has(.storefront-page) {
   z-index: -1;
   background:
     linear-gradient(180deg, rgba(1, 13, 63, 0.62) 0%, rgba(2, 27, 121, 0.42) 44%, rgba(1, 13, 63, 0.78) 100%);
+}
+
+/* Formas decorativas sutis sobre o vídeo (below do conteúdo, acima do overlay) */
+.storefront-page .hero-video::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 78% 26%, rgba(18, 164, 249, 0.34), transparent 34%),
+    radial-gradient(circle at 92% 70%, rgba(255, 241, 0, 0.16), transparent 30%);
+}
+
+.storefront-page .hero-video::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 64px 64px;
 }
 
 .storefront-page .hero-video-content {
@@ -638,7 +679,19 @@ body:has(.storefront-page) {
 /* ---------- Sobre Nós ---------- */
 
 .storefront-page .about-section {
+  position: relative;
   padding: clamp(28px, 5vw, 56px) 0 12px;
+}
+
+.storefront-page .about-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(18, 164, 249, 0.14), transparent 42%),
+    radial-gradient(circle at 90% 80%, rgba(2, 27, 121, 0.1), transparent 44%);
 }
 
 .storefront-page .about-grid {
@@ -700,15 +753,13 @@ body:has(.storefront-page) {
 }
 
 .storefront-page .about-stat {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--sf-line);
-  border-radius: var(--sf-radius-card);
-  box-shadow: var(--sf-shadow-card);
-  padding: 18px 20px;
+  /* Dados planos — sem fundo, borda ou sombra de cartão clicável */
+  padding: 10px 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  border-bottom: 1px solid var(--sf-line);
 }
 
 .storefront-page .about-stat strong {
@@ -725,6 +776,54 @@ body:has(.storefront-page) {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+/* ---------- Onde estamos ---------- */
+
+.storefront-page .location-section {
+  position: relative;
+}
+
+.storefront-page .location-card {
+  position: relative;
+  border-radius: var(--sf-radius-card-lg);
+  border: 1px solid var(--sf-line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.28)),
+    radial-gradient(circle at 88% 12%, rgba(18, 164, 249, 0.18), transparent 46%);
+  padding: clamp(28px, 4vw, 44px);
+  overflow: hidden;
+}
+
+.storefront-page .location-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(2, 27, 121, 0.06) 1px, transparent 1px) 0 0 / 46px 46px,
+    linear-gradient(90deg, rgba(2, 27, 121, 0.06) 1px, transparent 1px) 0 0 / 46px 46px;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 24%, #000 78%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 24%, #000 78%, transparent);
+}
+
+.storefront-page .location-coords {
+  display: inline-block;
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.storefront-page .location-card p {
+  color: var(--sf-slate);
+  font-family: var(--sf-font-body);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  max-width: 52ch;
+  margin: 0 0 24px;
 }
 
 /* ---------- Botões ---------- */
@@ -1347,5 +1446,98 @@ body:has(.storefront-page) {
 @media (min-width: 1024px) {
   .bottom-nav.storefront {
     display: none;
+  }
+}
+
+/* ---------- Faixa de Parceiros (full-bleed, "PARCERIAS QUE LEVAM...") ---------- */
+
+.storefront-page .partners-band {
+  position: relative;
+  isolation: isolate;
+  background: #0a1030; /* navy escuro consistente com a marca */
+  color: #fff;
+  overflow: hidden;
+  padding: clamp(56px, 9vw, 110px) 0;
+}
+
+/* Padrão decorative line-art sutil — sem imagem externa */
+.storefront-page .partners-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(18, 164, 249, 0.16), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(255, 241, 0, 0.1), transparent 40%),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 56px 56px;
+}
+
+.storefront-page .partners-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.storefront-page .partners-eyebrow {
+  display: inline-block;
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.storefront-page .partners-title {
+  font-family: var(--sf-font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--sf-red);
+  margin: 0 auto;
+  max-width: 15ch;
+}
+
+.storefront-page .partners-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 56px);
+  margin-top: clamp(36px, 6vw, 64px);
+}
+
+.storefront-page .partners-logo {
+  font-family: var(--sf-font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(22px, 2.4vw, 30px);
+  color: rgba(255, 255, 255, 0.55);
+  transition: color var(--dur-fast) ease;
+}
+
+.storefront-page .partners-logo:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 640px) {
+  .storefront-page .partners-title {
+    font-size: clamp(36px, 11vw, 56px);
+  }
+
+  .storefront-page .partners-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: center;
+  }
+
+  .storefront-page .partners-logo {
+    font-size: 18px;
   }
 }
