@@ -176,25 +176,23 @@ export default async function HomePage() {
       <MotionSection className="partners-band">
         <div className="container partners-inner">
           <span className="partners-eyebrow">empresas que confiam</span>
-          <h2 className="partners-title">
-            PARCERIAS QUE LEVAM
-            <br />
-            SUA CARGA MAIS LONGE
-          </h2>
+          <h2 className="partners-title">PARCERIAS QUE LEVAM SUA CARGA MAIS LONGE</h2>
           <div className="partners-row">
-            {PARTNERS.map(({ name, mark }) => (
-              <div key={name} className="partners-logo">
-                <svg
-                  className="partners-logo-mark"
-                  viewBox="0 0 64 64"
-                  role="img"
-                  aria-label={`Logo ${name}`}
-                >
-                  {mark}
-                </svg>
-                <span className="partners-logo-name">{name}</span>
-              </div>
-            ))}
+            <div className="partners-track">
+              {[...PARTNERS, ...PARTNERS].map(({ name, mark }, i) => (
+                <div key={`${name}-${i}`} className="partners-logo">
+                  <svg
+                    className="partners-logo-mark"
+                    viewBox="0 0 64 64"
+                    role="img"
+                    aria-label={`Logo ${name}`}
+                  >
+                    {mark}
+                  </svg>
+                  <span className="partners-logo-name">{name}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </MotionSection>

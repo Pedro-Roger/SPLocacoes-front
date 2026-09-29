@@ -1541,21 +1541,40 @@ body:has(.storefront-page) {
   font-family: var(--sf-font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(32px, 4.5vw, 60px);
-  line-height: 0.95;
+  font-size: clamp(36px, 5.2vw, 60px);
+  line-height: 0.98;
   letter-spacing: -0.02em;
   color: var(--sf-red);
   margin: 0 auto;
-  max-width: 15ch;
+  max-width: none;
 }
 
+/* Carrusel infinito de logos (marquee) — 2 cópias idênticas no track */
 .storefront-page .partners-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(20px, 4vw, 56px);
+  position: relative;
   margin-top: clamp(36px, 6vw, 64px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.storefront-page .partners-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+  width: max-content;
+  padding: 4px 0;
+  animation: partners-scroll 34s linear infinite;
+  will-change: transform;
+}
+
+@keyframes partners-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .storefront-page .partners-logo {
@@ -1593,11 +1612,8 @@ body:has(.storefront-page) {
     font-size: clamp(26px, 7vw, 40px);
   }
 
-  .storefront-page .partners-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .storefront-page .partners-track {
     gap: 22px;
-    align-items: center;
   }
 
   .storefront-page .partners-logo {
@@ -1606,5 +1622,11 @@ body:has(.storefront-page) {
 
   .storefront-page .partners-logo-name {
     font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storefront-page .partners-track {
+    animation: none;
   }
 }
