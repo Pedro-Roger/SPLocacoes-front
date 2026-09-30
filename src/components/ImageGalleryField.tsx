@@ -3,11 +3,11 @@
 import { useRef, useState } from 'react';
 import { uploadImage } from '@/lib/upload';
 import type { EquipmentImage } from '@/lib/types';
+import ImageCropModal from './ImageCropModal';
 
-// Galeria de fotos do anúncio — upload múltiplo (mesma otimização automática
-// do backend: redimensiona + WebP), reordenação e remoção. O modelo
-// (`images: [{url,alt,order}]`) e o carrossel público já suportam múltiplas
-// fotos; este campo é o que faltava no painel para preenchê-las.
+// Galeria de fotos do anúncio — upload múltiplo com recorte real por imagem
+// (uma por vez, em fila) antes do envio. O arquivo recortado vai pro backend
+// já redimensionado/recortado; o modelo e o carrossel público continuam iguais.
 export default function ImageGalleryField({
   name,
   initialImages = [],
@@ -17,22 +17,45 @@ export default function ImageGalleryField({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<EquipmentImage[]>(initialImages);
-  const [sending, setSending] = useState(false);
+  const [queue, setQueue] = useState<File[]>([]);
+  const [cropping, setCropping] = useState<File | null>(null);
   const [error, setError] = useState(false);
 
-  async function handleFiles(files: FileList) {
-    setSending(true);
+  // Abre a fila de recorte: o primeiro arquivo vira o modal; os demais entram
+  // na fila e são processados um por vez à medida que o anterior é confirmado
+  // ou cancelado.
+  function handleFiles(files: FileList) {
+    const arr = Array.from(files);
+    if (!arr.length) return;
+    setQueue(arr);
+    setCropping(arr[0]);
+  }
+
+  function advanceQueue() {
+    setQueue((prev) => {
+      const rest = prev.slice(1);
+      if (rest.length) setCropping(rest[0]);
+      else setCropping(null);
+      return rest;
+    });
+  }
+
+  // Usuário confirmou o recorte: envia o arquivo já recortado e parte pro próximo.
+  async function handleCropConfirm(cropped: File) {
     setError(false);
     try {
-      for (const file of Array.from(files)) {
-        const url = await uploadImage(file);
-        setImages((prev) => [...prev, { url, alt: '' }]);
-      }
+      const url = await uploadImage(cropped);
+      setImages((prev) => [...prev, { url, alt: '' }]);
     } catch {
       setError(true);
     } finally {
-      setSending(false);
+      advanceQueue();
     }
+  }
+
+  // Usuário cancelou a foto atual: não envia e pula pro próximo.
+  function handleCropCancel() {
+    advanceQueue();
   }
 
   function remove(index: number) {
@@ -93,10 +116,10 @@ export default function ImageGalleryField({
       <button
         type="button"
         className="btn btn-outline btn-sm"
-        disabled={sending}
+        disabled={cropping !== null}
         onClick={() => fileRef.current?.click()}
       >
-        {sending ? 'Enviando...' : 'Adicionar fotos'}
+        {cropping ? 'Recortando...' : 'Adicionar fotos'}
       </button>
       <input
         ref={fileRef}
@@ -112,6 +135,14 @@ export default function ImageGalleryField({
       <input type="hidden" name={name} value={JSON.stringify(images)} />
       {error && (
         <p className="form-feedback error">Falha no envio de uma ou mais fotos. Tente novamente.</p>
+      )}
+      {cropping && (
+        <ImageCropModal
+          file={cropping}
+          aspect={4 / 3}
+          onConfirm={handleCropConfirm}
+          onCancel={handleCropCancel}
+        />
       )}
     </div>
   );
