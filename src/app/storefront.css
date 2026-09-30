@@ -44,19 +44,17 @@
   --sf-radius-tag: 5px;
 }
 
-/* Body só ganha o canvas quente quando a página tem conteúdo storefront —
-   página de admin/login mantém o --bg original de globals.css. */
+/* Body do storefront: imagem de fundo (public/fundo.jpg) sob todas as
+   áreas claras — com véu claro sutil para manter a legibilidade do texto.
+   Admin/login continua com o --bg original de globals.css. */
 body:has(.storefront-page) {
   background:
-    linear-gradient(135deg, rgba(18, 164, 249, 0.12) 0 1px, transparent 1px) 0 0 / 34px 34px,
-    radial-gradient(circle at 84% 8%, rgba(18, 164, 249, 0.2), transparent 30%),
-    linear-gradient(180deg, #f8fbfd 0%, var(--sf-canvas) 46%, #edf5f9 100%);
+    linear-gradient(180deg, rgba(248, 251, 253, 0.86) 0%, rgba(237, 245, 249, 0.82) 100%),
+    url('/fundo.jpg') center / cover no-repeat fixed;
 }
 
 .storefront-page {
-  background:
-    linear-gradient(90deg, rgba(2, 27, 121, 0.08) 0 1px, transparent 1px) center top / min(92vw, 1200px) 100% no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
+  background: transparent;
   color: var(--sf-carbon);
   font-family: var(--sf-font-body);
   min-height: 100vh;
@@ -83,10 +81,10 @@ body:has(.storefront-page) {
 /* ---------- Header / nav pill ---------- */
 
 .header.storefront {
-  background: rgba(248, 251, 253, 0.78);
-  backdrop-filter: blur(18px) saturate(1.08);
+  background: transparent;
+  backdrop-filter: blur(14px) saturate(1.05);
   border-bottom: 0;
-  box-shadow: 0 1px 0 rgba(2, 27, 121, 0.08);
+  box-shadow: none;
   padding: 12px 0 8px;
   /* Altura do logo controlada aqui para permitir o encolhimento no scroll */
   --header-logo-h: 56px;
@@ -99,12 +97,12 @@ body:has(.storefront-page) {
 }
 
 /* Compactação do header no scroll (storefront) — reference de comportamento
-   do atomhawk (altura total diminui), mantendo a marca clara da SP Locações.
-   Reduz o padding vertical + encolhe o logo; o fundo continua claro/solido. */
+   do atomhawk (altura total diminui). Fundo continua transparente (blur
+   frosted garante legibilidade); apenas sombra separa do conteúdo. */
 .header.storefront.scrolled {
   padding: 6px 0 4px;
-  background: rgba(248, 251, 253, 0.97);
-  box-shadow: 0 1px 0 rgba(2, 27, 121, 0.06), 0 20px 42px -30px rgba(1, 13, 63, 0.52);
+  background: transparent;
+  box-shadow: 0 20px 42px -34px rgba(1, 13, 63, 0.42);
   --header-logo-h: 34px;
 }
 
@@ -139,13 +137,13 @@ body:has(.storefront-page) {
 }
 
 .header.storefront .header-tabs {
-  background: rgba(255, 255, 255, 0.72);
+  background: transparent;
   border-radius: var(--sf-radius-pill);
-  border: 1px solid rgba(2, 27, 121, 0.14);
+  border: 1px solid transparent;
   padding: 5px;
   gap: 5px;
   margin-left: auto;
-  box-shadow: 0 12px 28px -24px rgba(1, 13, 63, 0.65);
+  box-shadow: none;
 }
 
 .header.storefront .header-tabs a {
