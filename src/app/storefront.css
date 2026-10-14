@@ -722,11 +722,11 @@ body:has(.storefront-page) {
 .storefront-page .about-copy .about-lead {
   color: var(--sf-carbon);
   font-family: var(--sf-font-display);
-  font-size: clamp(26px, 3.25vw, 42px);
+  font-size: clamp(25px, 2.9vw, 40px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.018em;
-  max-width: 16ch;
+  max-width: 28ch;
   margin: 0 0 24px;
 }
 
@@ -930,6 +930,10 @@ body:has(.storefront-page) {
   .storefront-page .about-section {
     padding: 24px 18px;
     border-radius: 12px;
+  }
+
+  .storefront-page .about-copy .about-lead {
+    max-width: 20ch;
   }
 
   .storefront-page .about-timeline {
