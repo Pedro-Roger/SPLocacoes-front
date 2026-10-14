@@ -1782,9 +1782,8 @@ body:has(.storefront-page) {
   height: clamp(38px, 4.5vw, 54px);
   max-width: 180px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.78;
-  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease, filter var(--dur-fast) ease;
+  opacity: 0.9;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease;
 }
 
 .storefront-page .partners-logo-name {
@@ -1798,8 +1797,7 @@ body:has(.storefront-page) {
 
 .storefront-page .partners-logo:hover .partners-logo-image {
   opacity: 1;
-  filter: none;
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .storefront-page .partners-logo:hover {
