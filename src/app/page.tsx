@@ -80,15 +80,19 @@ export default async function HomePage() {
             </div>
             <div className="about-grid">
               <div className="about-copy">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                  nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                <p className="about-lead">
+                  Uma história construída para manter a sua operação em movimento.
                 </p>
                 <p>
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                  fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                  culpa qui officia deserunt mollit anim id est laborum.
+                  Nossa história começa em 1997, quando a necessidade de equipamentos de
+                  transporte usados revelou uma oportunidade: criar uma operação especializada
+                  em semirreboques.
+                </p>
+                <p>
+                  Depois de 19 anos de aprendizado e especialização no setor, a SP Locações foi
+                  fundada em 2016. Hoje, unimos essa herança de mercado à modernidade das
+                  soluções de venda e locação, com qualidade, autonomia e eficiência para nossos
+                  parceiros.
                 </p>
                 <Link href="/locacao" className="about-cta">
                   Conheça nossa frota <ArrowRightIcon size={14} />
@@ -98,14 +102,45 @@ export default async function HomePage() {
                 <AutoplayVideo className="about-video" src="/sobre.mp4" ariaHidden />
               </div>
             </div>
-            <div className="about-stats">
-              <div className="about-stat">
-                <strong>2014</strong>
-                <span>fundação</span>
+            <div className="about-timeline" aria-label="Linha do tempo da SP Locações">
+              <div className="about-timeline-item">
+                <strong>1997</strong>
+                <span>o início da especialização</span>
               </div>
-              <div className="about-stat">
-                <strong>24h</strong>
-                <span>suporte logístico</span>
+              <div className="about-timeline-line" aria-hidden="true" />
+              <div className="about-timeline-item">
+                <strong>2016</strong>
+                <span>nasce a SP Locações</span>
+              </div>
+              <div className="about-timeline-line" aria-hidden="true" />
+              <div className="about-timeline-item about-timeline-item-current">
+                <strong>Hoje</strong>
+                <span>qualidade em movimento</span>
+              </div>
+            </div>
+            <div className="about-purpose">
+              <div className="about-purpose-heading">
+                <span className="about-purpose-mark" aria-hidden="true">SP</span>
+                <h3>Nossa meta</h3>
+              </div>
+              <p>
+                Não nos consolidar pelo tamanho da frota, mas pela fama da nossa qualidade.
+                Queremos ser reconhecidos como o parceiro que oferece o implemento mais
+                confiável, moderno e bem zelado do setor.
+              </p>
+              <div className="about-principles">
+                <div className="about-principle">
+                  <strong>Previsibilidade</strong>
+                  <span>Equipamentos bem cuidados para sua operação planejar melhor.</span>
+                </div>
+                <div className="about-principle">
+                  <strong>Economia inteligente</strong>
+                  <span>Um modelo pensado para reduzir imprevistos e custo corretivo.</span>
+                </div>
+                <div className="about-principle">
+                  <strong>Manutenção justa</strong>
+                  <span>Cuidado estratégico, transparente e proporcional ao uso.</span>
+                </div>
               </div>
             </div>
           </Parallax>
@@ -237,7 +272,7 @@ function WhatsAppLink() {
 }
 
 // Placeholders de logo dos parceiros (estilo logo wall monocromático,
-// como "Our Clients" da atomhawk). Trocar por <img> quando os logos
+// como "Our Clients" da atomhawk). Trocar por imagens reais quando os logos
 // reais forem fornecidos.
 const PARTNERS: { name: string; mark: React.ReactNode }[] = [
   {

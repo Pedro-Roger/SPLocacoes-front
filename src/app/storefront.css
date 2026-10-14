@@ -712,6 +712,17 @@ body:has(.storefront-page) {
   margin: 0 0 14px;
 }
 
+.storefront-page .about-copy .about-lead {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-display);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  max-width: 12ch;
+  margin: 0 0 24px;
+}
+
 .storefront-page .about-cta {
   display: inline-flex;
   align-items: center;
@@ -745,6 +756,125 @@ body:has(.storefront-page) {
   display: block;
 }
 
+.storefront-page .about-timeline {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  margin: clamp(32px, 5vw, 64px) 0 clamp(40px, 7vw, 82px);
+  padding: 20px 0;
+  border-top: 1px solid var(--sf-line);
+  border-bottom: 1px solid var(--sf-line);
+}
+
+.storefront-page .about-timeline-item {
+  display: grid;
+  gap: 5px;
+  min-width: max-content;
+}
+
+.storefront-page .about-timeline-item strong {
+  color: var(--sf-carbon);
+  font-family: var(--sf-font-display);
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 0.95;
+}
+
+.storefront-page .about-timeline-item span {
+  color: var(--sf-smoke);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.storefront-page .about-timeline-item-current strong {
+  color: var(--sf-red-dark);
+}
+
+.storefront-page .about-timeline-line {
+  height: 1px;
+  flex: 1;
+  min-width: 24px;
+  background: var(--sf-line);
+}
+
+.storefront-page .about-purpose {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: 18px 48px;
+  padding: clamp(28px, 5vw, 56px);
+  border-radius: var(--sf-radius-card-lg);
+  background: var(--sf-carbon);
+  color: #fff;
+  box-shadow: var(--sf-shadow-card);
+}
+
+.storefront-page .about-purpose-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.storefront-page .about-purpose-heading h3 {
+  margin: 0;
+  font-family: var(--sf-font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.storefront-page .about-purpose-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  color: var(--sf-red);
+  font-family: var(--sf-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.storefront-page .about-purpose > p {
+  max-width: 52ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.55;
+}
+
+.storefront-page .about-principles {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 18px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.storefront-page .about-principle {
+  display: grid;
+  gap: 10px;
+  padding: 22px 20px 4px 0;
+  background: var(--sf-carbon);
+}
+
+.storefront-page .about-principle strong {
+  color: #fff;
+  font-family: var(--sf-font-display);
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.storefront-page .about-principle span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 25ch;
+}
+
 .storefront-page .about-stats {
   display: flex;
   flex-wrap: wrap;
@@ -773,6 +903,37 @@ body:has(.storefront-page) {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+@media (max-width: 767px) {
+  .storefront-page .about-timeline {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .storefront-page .about-timeline-line {
+    width: 1px;
+    height: 20px;
+    flex: 0 0 auto;
+    margin-left: 4px;
+  }
+
+  .storefront-page .about-purpose {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 28px 22px;
+  }
+
+  .storefront-page .about-principles {
+    grid-template-columns: 1fr;
+    gap: 1px;
+    margin-top: 0;
+  }
+
+  .storefront-page .about-principle {
+    padding: 18px 0;
+  }
 }
 
 /* ---------- Onde estamos ---------- */
@@ -1585,7 +1746,7 @@ body:has(.storefront-page) {
 }
 
 /* Placeholder de logo monocromático (estilo "Our Clients" da atomhawk).
-   Trocar por <img> quando os logos reais forem fornecidos. */
+   Trocar por imagens reais quando os logos forem fornecidos. */
 .storefront-page .partners-logo-mark {
   width: clamp(64px, 7vw, 92px);
   height: auto;
