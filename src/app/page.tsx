@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import EquipmentCard from '@/components/EquipmentCard';
 import WhatsAppFab from '@/components/WhatsAppFab';
 import Parallax from '@/components/Parallax';
@@ -214,16 +215,15 @@ export default async function HomePage() {
           <h2 className="partners-title">PARCERIAS QUE LEVAM SUA CARGA MAIS LONGE</h2>
           <div className="partners-row">
             <div className="partners-track">
-              {[...PARTNERS, ...PARTNERS].map(({ name, mark }, i) => (
+              {[...PARTNERS, ...PARTNERS, ...PARTNERS].map(({ name, src }, i) => (
                 <div key={`${name}-${i}`} className="partners-logo">
-                  <svg
-                    className="partners-logo-mark"
-                    viewBox="0 0 64 64"
-                    role="img"
-                    aria-label={`Logo ${name}`}
-                  >
-                    {mark}
-                  </svg>
+                  <Image
+                    src={src}
+                    alt={`Logo ${name}`}
+                    width={180}
+                    height={60}
+                    className="partners-logo-image"
+                  />
                   <span className="partners-logo-name">{name}</span>
                 </div>
               ))}
@@ -271,62 +271,10 @@ function WhatsAppLink() {
   );
 }
 
-// Placeholders de logo dos parceiros (estilo logo wall monocromático,
-// como "Our Clients" da atomhawk). Trocar por imagens reais quando os logos
-// reais forem fornecidos.
-const PARTNERS: { name: string; mark: React.ReactNode }[] = [
-  {
-    name: 'RANDON',
-    mark: (
-      <>
-        <polygon points="32,6 56,20 56,44 32,58 8,44 8,20" fill="none" stroke="currentColor" strokeWidth="4" />
-        <circle cx="32" cy="32" r="9" fill="currentColor" />
-      </>
-    ),
-  },
-  {
-    name: 'FACCHINI',
-    mark: (
-      <>
-        <rect x="10" y="10" width="44" height="44" fill="none" stroke="currentColor" strokeWidth="4" />
-        <path d="M22 42V22h20" fill="none" stroke="currentColor" strokeWidth="4" />
-      </>
-    ),
-  },
-  {
-    name: 'LIBRELATO',
-    mark: (
-      <>
-        <circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" strokeWidth="4" />
-        <path d="M20 36c4-10 20-10 24 0" fill="none" stroke="currentColor" strokeWidth="4" />
-      </>
-    ),
-  },
-  {
-    name: 'NOMA',
-    mark: (
-      <>
-        <path d="M32 8l6.8 13.8L54 24l-11 10.7 2.6 15.1L32 42.8 18.4 49.8 21 34.7 10 24l15.2-2.2z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
-      </>
-    ),
-  },
-  {
-    name: 'GUERRA',
-    mark: (
-      <>
-        <path d="M32 8l20 8v14c0 12-8.5 20.5-20 26-11.5-5.5-20-14-20-26V16z" fill="none" stroke="currentColor" strokeWidth="4" />
-        <path d="M24 32l6 6 12-12" fill="none" stroke="currentColor" strokeWidth="4" />
-      </>
-    ),
-  },
-  {
-    name: 'RODEO',
-    mark: (
-      <>
-        <circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" strokeWidth="4" />
-        <circle cx="32" cy="32" r="10" fill="none" stroke="currentColor" strokeWidth="4" />
-        <circle cx="32" cy="32" r="3" fill="currentColor" />
-      </>
-    ),
-  },
+// Parceiros oficiais da SP Locações
+const PARTNERS: { name: string; src: string }[] = [
+  { name: 'RANDON', src: '/randon-logo.png' },
+  { name: 'FACCHINI', src: '/fachi-logo.png' },
+  { name: 'GUERRA', src: '/guerra-logo.png' },
+  { name: 'TRUCKVAN', src: '/truckvan.png' },
 ];

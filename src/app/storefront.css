@@ -1770,30 +1770,40 @@ body:has(.storefront-page) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  color: rgba(255, 255, 255, 0.55);
-  transition: color var(--dur-fast) ease;
+  color: rgba(255, 255, 255, 0.65);
+  transition: all var(--dur-fast) ease;
+  padding: 8px 16px;
 }
 
-/* Placeholder de logo monocromático (estilo "Our Clients" da atomhawk).
-   Trocar por imagens reais quando os logos forem fornecidos. */
-.storefront-page .partners-logo-mark {
-  width: clamp(64px, 7vw, 92px);
-  height: auto;
-  aspect-ratio: 1;
-  display: block;
+.storefront-page .partners-logo-image {
+  width: auto;
+  height: clamp(38px, 4.5vw, 54px);
+  max-width: 180px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.78;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease, filter var(--dur-fast) ease;
 }
 
 .storefront-page .partners-logo-name {
   font-family: var(--sf-font-display);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: clamp(14px, 1.4vw, 17px);
+  letter-spacing: 0.05em;
+  font-size: clamp(12px, 1.2vw, 14px);
+  opacity: 0.85;
+}
+
+.storefront-page .partners-logo:hover .partners-logo-image {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.05);
 }
 
 .storefront-page .partners-logo:hover {
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 1);
 }
 
 @media (max-width: 640px) {
